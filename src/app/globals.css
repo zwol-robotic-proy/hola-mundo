@@ -84,3 +84,14 @@ body {
 .animate-fade-in {
   animation: fadeIn 0.4s ease-in-out;
 }
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 25s linear infinite;
+}

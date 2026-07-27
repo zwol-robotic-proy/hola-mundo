@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zwol-Home | Infraestructura Domótica e Ingeniería Industrial</title>
+    
+    <!-- Fuentes de Alta Gama -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Syne:wght@500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
+                    },
+                    colors: {
+                        zwol: {
+                            black: '#030509',
+                            dark: '#0A0E17',
+                            card: '#111726',
+                            cyan: '#00d2ff',
+                            blue: '#2563eb',
+                            silver: '#e2e8f0'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --cursor-size: 10px;
+            --accent-cyan: #00d2ff;
+        }
+        
+        body {
+            background-color: #030509;
+            color: #E2E8F0;
+            overflow-x: hidden;
+            margin: 0;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .title-hero {
+            font-size: clamp(1.8rem, 3.4vw, 3.4rem);
+            line-height: 1.15;
+        }
+        
+        .title-section {
+            font-size: clamp(2rem, 4vw, 3.75rem);
+            line-height: 1.1;
+        }
+
+        .title-card {
+            font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030509; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00d2ff; }
+
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            background-color: var(--accent-cyan);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            transition: width 0.2s, height 0.2s, border-color 0.2s, background-color 0.2s;
+        }
+        .cursor-hover .cursor-dot { width: 0; height: 0; opacity: 0; }
+        .cursor-hover .cursor-outline {
+            width: 70px; height: 70px;
+            background-color: rgba(0, 210, 255, 0.1);
+            backdrop-filter: blur(4px);
+            border-color: #00d2ff;
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 0;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(17, 23, 38, 0.7) 0%, rgba(10, 14, 23, 0.8) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(0, 210, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card-hover {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-card-hover:hover {
+            transform: translateY(-6px);
+            border-color: rgba(0, 210, 255, 0.4);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 210, 255, 0.15);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: 200%;
+            animation: marquee 25s linear infinite;
+        }
+
+        .img-container {
+            overflow: hidden;
+            position: relative;
+            border-radius: 1.5rem;
+        }
+        .img-container img {
+            width: 100%;
+            height: 115%;
+            object-fit: cover;
+            transition: transform 0.7s ease, filter 0.7s ease;
+            filter: brightness(0.9) contrast(1.05);
+        }
+        .img-container:hover img {
+            transform: scale(1.03);
+            filter: brightness(1) contrast(1.1);
+        }
+
+        /* Control de vistas (Landing / Cotizador) */
+        .app-view {
+            display: none;
+        }
+        .app-view.active-view {
+            display: block;
+        }
+        .step-content {
+            display: none;
+        }
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-zwol-cyan selection:text-black">
+
+    <canvas id="webgl-canvas"></canvas>
+
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <!-- Navegación Principal Global -->
+    <nav class="fixed top-0 w-full z-50 py-4 px-6 md:px-12 transition-all duration-300 bg-zwol-black/90 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" onclick="cambiarVista('home')" class="flex items-center gap-3 hover-target group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-zwol-cyan to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,210,255,0.4)]">
+                    <i class="fa-solid fa-microchip text-zwol-black text-lg"></i>
+                </div>
+                <span class="font-display font-bold text-xl md:text-2xl tracking-tight text-white uppercase">Zwol<span class="text-zwol-cyan">-</span>Home</span>
+            </a>
+            
+            <div id="nav-links-home" class="hidden lg:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-gray-400">
+                <a href="#concepto" class="hover:text-zwol-cyan transition-colors hover-target">01. Concepto</a>
+                <a href="#desafio" class="hover:text-zwol-cyan transition-colors hover-target">02. El Desafío</a>
+                <a href="#ingenieria" class="hover:text-zwol-cyan transition-colors hover-target">03. ModBus TCP-IP</a>
+                <a href="#control" class="hover:text-zwol-cyan transition-colors hover-target">04. Interfaces</a>
+                <a href="#ecosistema" class="hover:text-zwol-cyan transition-colors hover-target">05. Ecosistema</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="cambiarVista('cotizador')" class="hidden sm:inline-flex hover-target px-6 py-2.5 rounded-full bg-gradient-to-r from-zwol-cyan to-blue-600 text-zwol-black font-bold text-xs uppercase tracking-wider hover:shadow-[0_0_20px_rgba(0,210,255,0.5)] transition-all">
+                    Iniciar Proyecto
+                </button>
+                <button id="menu-btn" class="lg:hidden text-white text-2xl p-2 focus:outline-none hover-target">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-zwol-dark/95 backdrop-blur-xl border-b border-white/10 px-6 py-6 space-y-4 font-mono text-xs uppercase tracking-widest text-gray-300">
+            <a href="#concepto" onclick="cambiarVista('home'); toggleMobileMenu();" class="block hover:text-zwol-cyan transition-colors">01. Concepto</a>
+            <a href="#desafio" onclick="cambiarVista('home'); toggleMobileMenu();" class="block hover:text-zwol-cyan transition-colors">02. El Desafío</a>
+            <a href="#ingenieria" onclick="cambiarVista('home'); toggleMobileMenu();" class="block hover:text-zwol-cyan transition-colors">03. ModBus TCP-IP</a>
+            <a href="#control" onclick="cambiarVista('home'); toggleMobileMenu();" class="block hover:text-zwol-cyan transition-colors">04. Interfaces</a>
+            <a href="#ecosistema" onclick="cambiarVista('home'); toggleMobileMenu();" class="block hover:text-zwol-cyan transition-colors">05. Ecosistema</a>
+            <button onclick="cambiarVista('cotizador'); toggleMobileMenu();" class="w-full text-center py-3 rounded-xl bg-zwol-cyan text-zwol-black font-bold uppercase">Iniciar Proyecto</button>
+        </div>
+    </nav>
+
+
+    <!-- ========================================== -->
+    <!-- VISTA 1: LANDING PAGE PRINCIPAL            -->
+    <!-- ========================================== -->
+    <div id="view-home" class="app-view active-view relative z-10 pt-28">
+
+        <!-- HERO SECTION -->
+        <section class="min-h-[90vh] flex flex-col justify-center px-6 md:px-12 lg:px-16 max-w-7xl mx-auto py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                
+                <div class="lg:col-span-7 space-y-6 z-10 order-2 lg:order-1">
+                    <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full glass-panel text-zwol-cyan text-xs font-mono tracking-widest uppercase">
+                        <span class="w-2 h-2 rounded-full bg-zwol-cyan animate-pulse"></span>
+                        Ingeniería Residencial de Alta Gama • Nordelta
+                    </div>
+                    
+                    <h1 class="font-display font-extrabold text-white uppercase tracking-tighter title-hero">
+                        Tu hogar, tus reglas, <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-zwol-cyan via-blue-400 to-indigo-300">soft de vanguardia.</span>
+                    </h1>
+                    
+                    <p class="text-gray-300 text-base md:text-lg font-light leading-relaxed max-w-xl">
+                        La unificación definitiva entre la domótica de lujo y la robustez de la ingeniería industrial. Un único cerebro operativo diseñado para no fallar jamás.
+                    </p>
+
+                    <blockquote class="border-l-2 border-zwol-cyan pl-4 text-sm md:text-base italic text-gray-400 font-mono">
+                        "No importa desde dónde lo controles, sino a dónde quieres llegar. Y Zwol-Home lo resuelve."
+                    </blockquote>
+
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <a href="#concepto" class="hover-target w-full sm:w-auto text-center px-8 py-4 rounded-xl bg-zwol-cyan text-zwol-black font-bold text-sm uppercase tracking-wider hover:bg-white transition-all shadow-[0_0_25px_rgba(0,210,255,0.3)] inline-flex items-center justify-center gap-3">
+                            Explorar Ecosistema
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#ingenieria" class="hover-target w-full sm:w-auto text-center px-8 py-4 rounded-xl glass-panel text-white font-bold text-sm uppercase tracking-wider hover:border-zwol-cyan transition-all inline-flex items-center justify-center">
+                            Especificaciones ModBus
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 order-1 lg:order-2">
+                    <div class="img-container aspect-[4/5] glass-panel p-2 hover-target max-w-md mx-auto lg:max-w-none">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop" alt="Arquitectura Smart Home de Alta Gama">
+                        
+                        <div class="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 p-3 md:p-4 rounded-xl glass-panel text-[11px] md:text-xs font-mono space-y-1.5">
+                            <div class="flex justify-between text-gray-400">
+                                <span>CEREBRO CENTRAL:</span>
+                                <span class="text-zwol-cyan font-bold tracking-wider">ZWOL-CORE</span>
+                            </div>
+                            <div class="flex justify-between text-gray-400">
+                                <span>LATENCIA DE RED:</span>
+                                <span class="text-green-400">0.2ms (CERO LATENCIA)</span>
+                            </div>
+                            <div class="flex justify-between text-gray-400">
+                                <span>NODOS FÍSICOS I/O:</span>
+                                <span class="text-white">HASTA 160 NODOS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MARQUEE TICKER INDUSTRIAL -->
+        <div class="border-y border-white/10 bg-zwol-dark/90 py-4 overflow-hidden my-12">
+            <div class="animate-marquee whitespace-nowrap font-mono text-xs md:text-sm text-zwol-cyan tracking-widest uppercase flex items-center gap-8">
+                <span><i class="fa-solid fa-bolt mr-2"></i> Protocolo ModBus TCP-IP</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-shield-cat mr-2"></i> Procesamiento Local First</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-network-wired mr-2"></i> Topología Descentralizada</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-display mr-2"></i> Pantalla Táctil HMI 10"</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-infinity mr-2"></i> Hasta 160 Nodos de Entrada / Salida</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-house-signal mr-2"></i> Integración Home Assistant</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-bolt mr-2"></i> Protocolo ModBus TCP-IP</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-shield-cat mr-2"></i> Procesamiento Local First</span>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 01: CONCEPTO FUNDAMENTAL -->
+        <section id="concepto" class="py-20 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
+            <div class="space-y-4 mb-16">
+                <span class="text-zwol-cyan font-mono text-xs uppercase tracking-widest">01. Filosofía de Integración</span>
+                <h2 class="font-display font-bold text-white uppercase title-section">
+                    Concepto <span class="text-transparent bg-clip-text bg-gradient-to-r from-zwol-cyan to-blue-500">Fundamental</span>
+                </h2>
+                <p class="text-gray-400 text-lg max-w-3xl font-light">
+                    Zwol-Home eleva el estándar de conectividad residencial. Más que una simple "casa inteligente", creamos un ecosistema vivo que reduce fricciones, anticipa tus necesidades y trabaja en silencio.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-2xl glass-card-hover space-y-4 hover-target">
+                    <div class="w-12 h-12 rounded-xl bg-zwol-cyan/10 border border-zwol-cyan/30 flex items-center justify-center text-zwol-cyan text-xl">
+                        <i class="fa-solid fa-cubes"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-white title-card">Sin Ataduras Propietarias</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Arquitectura abierta y modular. Integración sin bloqueos con las mejores marcas y estándares internacionales del mercado sin depender de un fabricante cerrado.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl glass-card-hover space-y-4 hover-target">
+                    <div class="w-12 h-12 rounded-xl bg-zwol-cyan/10 border border-zwol-cyan/30 flex items-center justify-center text-zwol-cyan text-xl">
+                        <i class="fa-solid fa-industry"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-white title-card">Fiabilidad Industrial 24/7</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Componentes y lógica heredados de la automatización robótica e industrial. Diseñado para operar de forma continua sin reinicios ni congelamientos.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl glass-card-hover space-y-4 hover-target">
+                    <div class="w-12 h-12 rounded-xl bg-zwol-cyan/10 border border-zwol-cyan/30 flex items-center justify-center text-zwol-cyan text-xl">
+                        <i class="fa-solid fa-user-lock"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-white title-card">Privacidad "Local First"</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Tus datos, rutinas, cámaras y biometría se procesan físicamente dentro de tu propiedad. Cero dependencia de servidores externos o nubes vulnerables.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 02: EL DESAFÍO ACTUAL -->
+        <section id="desafio" class="py-20 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
+            <div class="glass-panel p-8 md:p-14 rounded-3xl relative overflow-hidden">
+                <div class="space-y-4 mb-12">
+                    <span class="text-zwol-cyan font-mono text-xs uppercase tracking-widest">02. Fin a la Fragmentación</span>
+                    <h2 class="font-display font-bold text-white uppercase title-section">
+                        El Desafío <span class="text-red-400">Actual</span> vs <span class="text-zwol-cyan">Zwol-Home</span>
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-6 border-l-2 border-red-500/30 pl-6">
+                        <h3 class="font-display font-bold text-xl text-red-400 uppercase tracking-wider flex items-center gap-3">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            El Estándar Comercial Frágil
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-red-500/5 p-4 rounded-xl border border-red-500/10">
+                                <h4 class="font-bold text-white text-base mb-1">Apps Dispersas & Múltiples Pantallas</h4>
+                                <p class="text-gray-400 text-sm">Una aplicación para el aire acondicionado, otra para luces, otra para cámaras. Frustración y complejidad diaria.</p>
+                            </div>
+                            <div class="bg-red-500/5 p-4 rounded-xl border border-red-500/10">
+                                <h4 class="font-bold text-white text-base mb-1">Dispositivos Aislados sin Diálogo</h4>
+                                <p class="text-gray-400 text-sm">Componentes de distintos proveedores que no interactúan entre sí, requiriendo intervención manual permanente.</p>
+                            </div>
+                            <div class="bg-red-500/5 p-4 rounded-xl border border-red-500/10">
+                                <h4 class="font-bold text-white text-base mb-1">Saturación WiFi & Dependencia Cloud</h4>
+                                <p class="text-gray-400 text-sm">Sistemas inalámbricos que caen ante cortes de internet o lentitud de servidores externos globales.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 border-l-2 border-zwol-cyan pl-6">
+                        <h3 class="font-display font-bold text-xl text-zwol-cyan uppercase tracking-wider flex items-center gap-3">
+                            <i class="fa-solid fa-circle-check"></i>
+                            La Respuesta Zwol-Home
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-zwol-cyan/5 p-4 rounded-xl border border-zwol-cyan/20">
+                                <h4 class="font-bold text-white text-base mb-1">Un Único Cerebro Operativo</h4>
+                                <p class="text-gray-400 text-sm">Consolidación total. Gestiona clima, audio, seguridad y luces desde una interfaz unificada y fluida.</p>
+                            </div>
+                            <div class="bg-zwol-cyan/5 p-4 rounded-xl border border-zwol-cyan/20">
+                                <h4 class="font-bold text-white text-base mb-1">Red Alámbrica Industrial Estructurada</h4>
+                                <p class="text-gray-400 text-sm">Cableado Cat6/KNX que elimina interferencias electromagnéticas y brinda ejecución con latencia 0.2ms.</p>
+                            </div>
+                            <div class="bg-zwol-cyan/5 p-4 rounded-xl border border-zwol-cyan/20">
+                                <h4 class="font-bold text-white text-base mb-1">Soberanía de Datos Local First</h4>
+                                <p class="text-gray-400 text-sm">Inmune a caídas mundiales de internet. Tu propiedad funciona autónomamente 24 horas al día, 365 días al año.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 03: INGENIERÍA MODBUS TCP-IP & HARDWARE -->
+        <section id="ingenieria" class="py-20 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="text-zwol-cyan font-mono text-xs uppercase tracking-widest">03. Arquitectura Robusta</span>
+                    <h2 class="font-display font-bold text-white uppercase title-section">
+                        Potencia de Ingeniería <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-zwol-cyan to-blue-600">ModBus TCP-IP</span>
+                    </h2>
+                    <p class="text-gray-300 font-light text-base leading-relaxed">
+                        Implementamos el protocolo estándar de la automatización industrial pesada. Una infraestructura alámbrica diseñada para cubrir superficies extensas de más de 1.000 m² sin pérdida de señal.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4 font-mono pt-4">
+                        <div class="glass-panel p-4 rounded-xl space-y-1">
+                            <span class="text-zwol-cyan font-bold text-3xl">160</span>
+                            <p class="text-gray-400 text-xs">NODOS FÍSICOS I/O</p>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl space-y-1">
+                            <span class="text-zwol-cyan font-bold text-3xl">0.2ms</span>
+                            <p class="text-gray-400 text-xs">LATENCIA DE COMUNICACIÓN</p>
+                        </div>
+                    </div>
+
+                    <ul class="space-y-3 font-mono text-xs text-gray-300 pt-2">
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-check text-zwol-cyan"></i>
+                            Topología descentralizada: la falla de un nodo no detiene al resto.
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-check text-zwol-cyan"></i>
+                            Soporte nativo para motores, climatización trifásica e iluminación DALI/DMX.
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-check text-zwol-cyan"></i>
+                            Gabinete técnico con protección contra sobretensiones y redundancia física.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="lg:col-span-6">
+                    <div class="img-container aspect-square glass-panel p-2 hover-target">
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop" alt="Servidores e Infraestructura de Automatización ModBus">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN 04: INTERFACES Y CONTROL MULTICANAL -->
+        <section id="control" class="py-20 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
+            <div class="space-y-4 mb-16 text-center">
+                <span class="text-zwol-cyan font-mono text-xs uppercase tracking-widest">04. Ergonomía & Control</span>
+                <h2 class="font-display font-bold text-white uppercase title-section">
+                    Hardware de Control & <span class="text-transparent bg-clip-text bg-gradient-to-r from-zwol-cyan to-indigo-400">Puntos de Mando</span>
+                </h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto font-light">
+                    El control debe adaptarse al usuario, nunca al revés. Zwol-Home ofrece tres niveles de interacción simultáneos e independientes.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-2xl space-y-6 glass-card-hover hover-target">
+                    <div class="img-container aspect-video">
+                        <img src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=800&auto=format&fit=crop" alt="Panel Táctil HMI de pared">
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-white title-card mb-2">Panel Táctil HMI 10"</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Pantalla capacitiva empotrada de grado industrial. Respuesta háptica inmediata para el control integral de la propiedad sin depender de teléfonos móviles.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-6 glass-card-hover hover-target">
+                    <div class="img-container aspect-video">
+                        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800&auto=format&fit=crop" alt="Aplicación móvil inteligente">
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-white title-card mb-2">Control Global Smartphone</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Acceso remoto cifrado desde cualquier lugar del mundo. Visualiza cámaras en vivo, ajusta la temperatura antes de llegar o verifica la seguridad de tu hogar.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-6 glass-card-hover hover-target">
+                    <div class="img-container aspect-video">
+                        <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=800&auto=format&fit=crop" alt="Interruptores de pared integrados">
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-white title-card mb-2">Teclas Físicas Inteligentes</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Mantiene la calidez y practicidad de los interruptores tradicionales de pared, dotándolos de lógica inteligente (pulsación larga, doble clic para escenas complejas).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 05: ECOSISTEMA ABIERTO E INTEGRACIONES -->
+        <section id="ecosistema" class="py-20 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
+            <div class="glass-panel p-8 md:p-14 rounded-3xl space-y-12">
+                <div class="space-y-4 text-center">
+                    <span class="text-zwol-cyan font-mono text-xs uppercase tracking-widest">05. Compatibilidad Universal</span>
+                    <h2 class="font-display font-bold text-white uppercase title-section">
+                        Ecosistema <span class="text-zwol-cyan">Abierto</span>
+                    </h2>
+                    <p class="text-gray-400 text-base max-w-2xl mx-auto font-light">
+                        Integración nativa respaldada por Home Assistant y compatibilidad con las principales plataformas globales de consumo.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div class="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-3 hover-target hover:border-zwol-cyan transition-colors">
+                        <i class="fa-solid fa-house-signal text-zwol-cyan text-4xl"></i>
+                        <h3 class="font-bold text-white text-base">Home Assistant</h3>
+                        <p class="text-gray-400 text-xs">Núcleo de automatización local más avanzado.</p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-3 hover-target hover:border-zwol-cyan transition-colors">
+                        <i class="fa-brands fa-apple text-white text-4xl"></i>
+                        <h3 class="font-bold text-white text-base">Apple HomeKit</h3>
+                        <p class="text-gray-400 text-xs">Sincronización fluida con iOS y Siri local.</p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-3 hover-target hover:border-zwol-cyan transition-colors">
+                        <i class="fa-brands fa-google text-red-400 text-4xl"></i>
+                        <h3 class="font-bold text-white text-base">Google Home</h3>
+                        <p class="text-gray-400 text-xs">Control por voz y gestión multidispositivo.</p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-3 hover-target hover:border-zwol-cyan transition-colors">
+                        <i class="fa-brands fa-spotify text-green-400 text-4xl"></i>
+                        <h3 class="font-bold text-white text-base">Spotify Connect</h3>
+                        <p class="text-gray-400 text-xs">Audio multizona sincronizado en cada ambiente.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 06: ESCENAS Y LÓGICAS AUTÓNOMAS -->
+        <section class="py-20 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
+            <div class="space-y-4 mb-16">
+                <span class="text-zwol-cyan font-mono text-xs uppercase tracking-widest">06. Rutinas Inteligentes</span>
+                <h2 class="font-display font-bold text-white uppercase title-section">
+                    Lógicas que Trabajan <span class="text-transparent bg-clip-text bg-gradient-to-r from-zwol-cyan to-blue-400">para Ti</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-2xl space-y-4 glass-card-hover hover-target">
+                    <div class="text-zwol-cyan text-3xl"><i class="fa-solid fa-door-open"></i></div>
+                    <h3 class="font-display font-bold text-white title-card">Escenas de Bienvenida</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Al ingresar a la propiedad, el sistema ajusta la iluminación cálida, climatiza los ambientes a la temperatura deseada y reproduce tu lista de reproducción preferida.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-4 glass-card-hover hover-target">
+                    <div class="text-zwol-cyan text-3xl"><i class="fa-solid fa-moon"></i></div>
+                    <h3 class="font-display font-bold text-white title-card">Ausencia Dinámica</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Simulación de presencia orgánica durante viajes. Enciende y apaga luces de forma no repetitiva y mantiene activo el perímetro de videovigilancia con IA.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl space-y-4 glass-card-hover hover-target">
+                    <div class="text-zwol-cyan text-3xl"><i class="fa-solid fa-leaf"></i></div>
+                    <h3 class="font-display font-bold text-white title-card">Eficiencia Energética</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Sensores lumínicos y de presencia que desconectan circuitos y climatizadores en zonas desocupadas, reduciendo el consumo eléctrico de forma autónoma.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER MONUMENTAL & CONTACTO -->
+        <footer id="contacto" class="border-t border-white/10 bg-zwol-black py-20 px-6 md:px-12 lg:px-16 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto space-y-16 relative z-10">
+                <div class="text-center space-y-6">
+                    <h2 class="font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-slate-600 uppercase tracking-tighter title-hero">
+                        Eleva tu Propiedad.
+                    </h2>
+                    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-light">
+                        Agenda una consulta con nuestra división de ingeniería y transforma tu manera de habitar el espacio.
+                    </p>
+                    <div class="pt-4">
+                        <button onclick="cambiarVista('cotizador')" class="hover-target inline-flex items-center gap-3 px-10 py-5 rounded-full bg-zwol-cyan text-zwol-black font-bold text-sm uppercase tracking-widest hover:bg-white transition-all shadow-[0_0_30px_rgba(0,210,255,0.4)]">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                            Cotizar Instalación
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-white/10 text-xs font-mono text-gray-500 uppercase tracking-widest">
+                    <div>
+                        <p class="text-white font-bold mb-1">ZWOL-HOME</p>
+                        <p>Infraestructura Domótica Industrial</p>
+                        <p>Buenos Aires, ARG</p>
+                    </div>
+                    <div class="text-left md:text-center">
+                        <p class="text-white font-bold mb-1">ESPECIFICACIONES</p>
+                        <p>Protocolo ModBus TCP-IP</p>
+                        <p>Procesamiento Local First</p>
+                    </div>
+                    <div class="text-left md:text-right">
+                        <p>&copy; 2026 ZWOL-HOME.</p>
+                        <p>Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- VISTA 2: COTIZADOR INTERACTIVO (WIZARD)    -->
+    <!-- ========================================== -->
+    <div id="view-cotizador" class="app-view relative z-10 pt-32 pb-20 px-6 md:px-12 max-w-3xl mx-auto">
+        <div class="glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden border border-zwol-cyan/30 space-y-8">
+            
+            <div class="space-y-3 text-center">
+                <span class="text-zwol-cyan font-mono text-xs uppercase tracking-widest">Bienvenido a tu Ecosistema</span>
+                <h1 class="font-display font-bold text-white uppercase text-2xl md:text-3xl tracking-tight">
+                    Configura tu <span class="text-transparent bg-clip-text bg-gradient-to-r from-zwol-cyan to-blue-500">Instalación</span>
+                </h1>
+                <div id="banner-motivacional" class="font-mono text-xs text-zwol-cyan tracking-wider bg-zwol-cyan/5 py-2 px-4 rounded-full inline-block border border-zwol-cyan/20">
+                    ⚡ Cada vez más cerca de tener tu casa inteligente.
+                </div>
+            </div>
+
+            <form id="wizard-form" class="space-y-6">
+                
+                <!-- PASO 1 -->
+                <div class="step-content active" data-step="1">
+                    <div class="space-y-4">
+                        <h3 class="font-display font-bold text-white text-lg border-b border-white/10 pb-2">01. Datos del Propietario</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">Nombre y Apellido</label>
+                                <input type="text" id="nombre" required placeholder="Ej. Alfredo Gómez" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">Teléfono / WhatsApp</label>
+                                <input type="tel" id="telefono" required placeholder="+54 11 ..." class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">Correo Electrónico</label>
+                                <input type="email" id="email" required placeholder="tu@correo.com" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">Tipo de Propiedad</label>
+                                <select id="tipo_prop" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                                    <option value="Vivienda Personal">Vivienda Personal</option>
+                                    <option value="Casa de Fin de Semana">Casa de Fin de Semana</option>
+                                    <option value="Comercial / Oficina">Comercial / Oficina</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 2 -->
+                <div class="step-content" data-step="2">
+                    <div class="space-y-4">
+                        <h3 class="font-display font-bold text-white text-lg border-b border-white/10 pb-2">02. Dimensiones de la Propiedad</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">Cantidad de Habitaciones</label>
+                                <select id="habitaciones" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                                    <option value="1 a 3">1 a 3 Habitaciones</option>
+                                    <option value="4 a 6" selected>4 a 6 Habitaciones (Standard)</option>
+                                    <option value="7 a 10">7 a 10 Habitaciones (Residencia)</option>
+                                    <option value="10+">Más de 10 Habitaciones</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">Circuitos de Luces / Lámparas</label>
+                                <select id="circuitos" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                                    <option value="Hasta 15">Hasta 15 circuitos</option>
+                                    <option value="Hasta 30" selected>Hasta 30 circuitos</option>
+                                    <option value="Hasta 60">Hasta 60 circuitos (DALI/DMX)</option>
+                                    <option value="160 Nodos">Infraestructura Máxima (160 Nodos)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">Metros Cuadrados (aprox.)</label>
+                                <input type="text" id="m2" placeholder="Ej. 350 m²" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                            </div>
+                            <div class="flex items-center pt-6">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="checkbox" id="no_recuerdo_m2" onchange="toggleM2()" class="w-4 h-4 rounded bg-zwol-dark border-white/20 text-zwol-cyan focus:ring-0">
+                                    <span class="font-mono text-xs text-gray-300">No recuerdo / No sé los metros exactos</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 3 -->
+                <div class="step-content" data-step="3">
+                    <div class="space-y-4">
+                        <h3 class="font-display font-bold text-white text-lg border-b border-white/10 pb-2">03. Exteriores & Automatización</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">¿Posee Pileta?</label>
+                                <select id="pileta" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                                    <option value="Sí (Automatizar bomba/filtrado)">Sí (Incluir automatización de bomba)</option>
+                                    <option value="No">No posee</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">¿Posee Riego Automático?</label>
+                                <select id="riego" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                                    <option value="Sí (Integrar al sistema)">Sí (Integrar al núcleo Zwol-Core)</option>
+                                    <option value="No">No posee</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-1 pt-2">
+                            <label class="block font-mono text-xs text-gray-300 uppercase">Requerimientos de Confort Adicionales</label>
+                            <div class="grid grid-cols-2 gap-3 pt-2 font-mono text-xs text-gray-300">
+                                <label class="flex items-center gap-2"><input type="checkbox" class="confort-opt" value="Climatización por Zonas"> Climatización por Zonas</label>
+                                <label class="flex items-center gap-2"><input type="checkbox" class="confort-opt" value="Persianas Motorizadas"> Persianas Motorizadas</label>
+                                <label class="flex items-center gap-2"><input type="checkbox" class="confort-opt" value="Audio Multiroom"> Audio Multiroom</label>
+                                <label class="flex items-center gap-2"><input type="checkbox" class="confort-opt" value="Seguridad / Cámaras IA"> Seguridad / Cámaras IA</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 4 -->
+                <div class="step-content" data-step="4">
+                    <div class="space-y-4">
+                        <h3 class="font-display font-bold text-white text-lg border-b border-white/10 pb-2">04. Conectividad & Autonomía Energética</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">Enlace de Internet Principal</label>
+                                <select id="internet" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                                    <option value="Starlink (Satelital Alta Velocidad)">Starlink (Satelital)</option>
+                                    <option value="Fibra Óptica (Movistar / Flow)">Fibra Óptica (Local)</option>
+                                    <option value="Redundante (Ambas)">Redundante (Doble Enlace)</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block font-mono text-xs text-gray-300 uppercase">Autonomía Solar (Zwol-Core)</label>
+                                <select id="solar" class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none">
+                                    <option value="Sí: Respaldo solar para Cerebro, Pantalla e Internet">Sí: Respaldo solar independiente (Core + Pantalla + Red)</option>
+                                    <option value="No: Red eléctrica general con protección">No: Conexión a red general protegida</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-1 pt-2">
+                            <label class="block font-mono text-xs text-gray-300 uppercase">Observaciones o Notas Especiales</label>
+                            <textarea id="notas" rows="2" placeholder="Detalles particulares de la obra..." class="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navegación del Wizard -->
+                <div class="flex justify-between items-center pt-6 border-t border-white/10">
+                    <div class="flex gap-3">
+                        <button type="button" onclick="cambiarVista('home')" class="px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-mono text-xs uppercase tracking-wider hover:bg-white/10 transition-all">
+                            <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Inicio
+                        </button>
+                        <button type="button" id="btn-anterior" onclick="cambiarPaso(-1)" class="hidden px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-mono text-xs uppercase tracking-wider hover:bg-white/10 transition-all">
+                            Anterior
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" id="btn-siguiente" onclick="cambiarPaso(1)" class="px-8 py-3.5 rounded-xl bg-zwol-cyan text-zwol-black font-bold text-xs uppercase tracking-wider hover:bg-white transition-all shadow-[0_0_20px_rgba(0,210,255,0.3)]">
+                            Siguiente <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                        <button type="button" id="btn-enviar" onclick="enviarFormulario()" class="hidden px-8 py-3.5 rounded-xl bg-gradient-to-r from-zwol-cyan to-blue-600 text-zwol-black font-bold text-xs uppercase tracking-wider hover:shadow-[0_0_25px_rgba(0,210,255,0.5)] transition-all">
+                            Enviar Cotización <i class="fa-solid fa-paper-plane ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- JavaScript Unificado Maestro -->
+    <script>
+        // Control de Vistas (Home / Cotizador)
+        function cambiarVista(vista) {
+            document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active-view'));
+            if (vista === 'home') {
+                document.getElementById('view-home').classList.add('active-view');
+                document.getElementById('nav-links-home').style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (vista === 'cotizador') {
+                document.getElementById('view-cotizador').classList.add('active-view');
+                document.getElementById('nav-links-home').style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Menú Mobile
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        function toggleMobileMenu() {
+            if (mobileMenu) mobileMenu.classList.toggle('hidden');
+        }
+        if (menuBtn) {
+            menuBtn.addEventListener('click', toggleMobileMenu);
+        }
+
+        // Cursor Interactivo
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        let mouseX = 0, mouseY = 0;
+        let outlineX = 0, outlineY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            if (cursorDot) {
+                cursorDot.style.left = `${mouseX}px`;
+                cursorDot.style.top = `${mouseY}px`;
+            }
+        });
+
+        function animateCursor() {
+            outlineX += (mouseX - outlineX) * 0.15;
+            outlineY += (mouseY - outlineY) * 0.15;
+            if (cursorOutline) {
+                cursorOutline.style.left = `${outlineX}px`;
+                cursorOutline.style.top = `${outlineY}px`;
+            }
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        document.querySelectorAll('.hover-target').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        // Lógica del Wizard
+        let pasoActual = 1;
+        const totalPasos = 4;
+        const frases = [
+            "⚡ Cada vez más cerca de tener tu casa inteligente.",
+            "🚀 Arquitectura industrial y soft de vanguardia para tu propiedad.",
+            "🔒 Soberanía absoluta, seguridad y control total en tus manos.",
+            "🌟 Estás a un solo paso de elevar el estándar de tu hogar."
+        ];
+
+        function cambiarPaso(direccion) {
+            if (direccion === 1 && pasoActual === 1) {
+                const nombre = document.getElementById('nombre').value;
+                const email = document.getElementById('email').value;
+                const telefono = document.getElementById('telefono').value;
+                if (!nombre || !email || !telefono) {
+                    alert('Por favor completa nombre, teléfono y correo electrónico para continuar.');
+                    return;
+                }
+            }
+
+            document.querySelector(`.step-content[data-step="${pasoActual}"]`).classList.remove('active');
+            pasoActual += direccion;
+            if (pasoActual < 1) pasoActual = 1;
+            if (pasoActual > totalPasos) pasoActual = totalPasos;
+
+            document.querySelector(`.step-content[data-step="${pasoActual}"]`).classList.add('active');
+            document.getElementById('banner-motivacional').innerText = frases[pasoActual - 1];
+
+            const btnAnterior = document.getElementById('btn-anterior');
+            const btnSiguiente = document.getElementById('btn-siguiente');
+            const btnEnviar = document.getElementById('btn-enviar');
+
+            if (pasoActual === 1) {
+                btnAnterior.classList.add('hidden');
+            } else {
+                btnAnterior.classList.remove('hidden');
+            }
+
+            if (pasoActual === totalPasos) {
+                btnSiguiente.classList.add('hidden');
+                btnEnviar.classList.remove('hidden');
+            } else {
+                btnSiguiente.classList.remove('hidden');
+                btnEnviar.classList.add('hidden');
+            }
+        }
+
+        function toggleM2() {
+            const checkbox = document.getElementById('no_recuerdo_m2');
+            const inputM2 = document.getElementById('m2');
+            if (checkbox.checked) {
+                inputM2.value = "No especificado / Estimar en visita";
+                inputM2.disabled = true;
+                inputM2.classList.add('opacity-50');
+            } else {
+                inputM2.value = "";
+                inputM2.disabled = false;
+                inputM2.classList.remove('opacity-50');
+            }
+        }
+
+        function enviarFormulario() {
+            const nombre = document.getElementById('nombre').value;
+            alert(`¡Excelente ${nombre}! Configuración procesada por ZWOL-CORE con éxito. ¡nos pondremos en contacto con usted y enviaremos la cotización a la brevedad!`);
+            cambiarVista('home');
+        }
+
+        // Three.js Background Particle Engine Interactivo (Conectado y Robusto)
+        const canvas = document.getElementById('webgl-canvas');
+        if (canvas) {
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x030509, 0.002);
+
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 120;
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const count = 180;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(count * 3);
+            const velocities = [];
+
+            for (let i = 0; i < count; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 300;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 300;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 300;
+
+                velocities.push({
+                    x: (Math.random() - 0.5) * 0.15,
+                    y: (Math.random() - 0.5) * 0.15,
+                    z: (Math.random() - 0.5) * 0.15
+                });
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const material = new THREE.PointsMaterial({
+                color: 0x00d2ff,
+                size: 2.2,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const pointCloud = new THREE.Points(geometry, material);
+            scene.add(pointCloud);
+
+            function animateWebGL() {
+                requestAnimationFrame(animateWebGL);
+
+                const pos = pointCloud.geometry.attributes.position.array;
+                for (let i = 0; i < count; i++) {
+                    pos[i * 3] += velocities[i].x;
+                    pos[i * 3 + 1] += velocities[i].y;
+                    pos[i * 3 + 2] += velocities[i].z;
+
+                    if (Math.abs(pos[i * 3]) > 150) velocities[i].x *= -1;
+                    if (Math.abs(pos[i * 3 + 1]) > 150) velocities[i].y *= -1;
+                    if (Math.abs(pos[i * 3 + 2]) > 150) velocities[i].z *= -1;
+                }
+                pointCloud.geometry.attributes.position.needsUpdate = true;
+
+                pointCloud.rotation.y += 0.0008;
+                pointCloud.rotation.x += 0.0004;
+
+                camera.position.x += ((mouseX - window.innerWidth / 2) * 0.02 - camera.position.x) * 0.05;
+                camera.position.y += (-(mouseY - window.innerHeight / 2) * 0.02 - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            }
+            animateWebGL();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+    </script>
+</body>
+</html>
