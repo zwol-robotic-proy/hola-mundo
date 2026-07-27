@@ -1,12 +1,10 @@
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 
-export interface ContainerProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  as?: React.ElementType;
+type ContainerProps = React.PropsWithChildren<{
   size?: "sm" | "md" | "lg" | "xl" | "full";
-}
+  className?: string;
+}>;
 
 const sizeClasses = {
   sm: "max-w-4xl",
@@ -17,22 +15,19 @@ const sizeClasses = {
 };
 
 export function Container({
-  as: Component = "div",
   size = "lg",
   className,
   children,
-  ...props
 }: ContainerProps) {
   return (
-    <Component
+    <div
       className={cn(
         "mx-auto w-full px-4 sm:px-6 lg:px-8 xl:px-10",
         sizeClasses[size],
         className
       )}
-      {...props}
     >
       {children}
-    </Component>
+    </div>
   );
 }
