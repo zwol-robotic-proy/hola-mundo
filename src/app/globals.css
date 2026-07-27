@@ -109,8 +109,18 @@ html.light {
   100% { transform: translateX(-50%); }
 }
 
+@keyframes glow-pulse {
+  0%, 100% { text-shadow: 0 0 10px rgba(0, 210, 255, 0.4), 0 0 20px rgba(0, 210, 255, 0.2); }
+  50% { text-shadow: 0 0 15px rgba(0, 210, 255, 0.6), 0 0 30px rgba(0, 210, 255, 0.3); }
+}
+
 .animate-marquee {
   display: flex;
   width: 200%;
-  animation: marquee 25s linear infinite;
+  animation: marquee 28s linear infinite;
+  gap: 2rem;
+}
+
+.marquee-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
 }

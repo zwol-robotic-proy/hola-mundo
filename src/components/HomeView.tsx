@@ -74,8 +74,12 @@ export default function HomeView({ onOpenCotizador }: HomeViewProps) {
       </section>
 
       {/* MARQUEE TICKER INDUSTRIAL */}
-      <div className="border-y border-white/10 bg-zwol-dark/90 py-4 overflow-hidden my-12">
-        <div className="animate-marquee whitespace-nowrap font-mono text-xs md:text-sm text-zwol-cyan tracking-widest uppercase flex items-center gap-8">
+      <div className="border-y border-white/10 bg-zwol-dark/90 backdrop-blur-sm py-4 overflow-hidden my-12 relative">
+        {/* Efecto fade en los bordes */}
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zwol-dark via-zwol-dark/50 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zwol-dark via-zwol-dark/50 to-transparent z-10 pointer-events-none" />
+        
+        <div className="animate-marquee whitespace-nowrap font-mono text-xs md:text-sm text-zwol-cyan tracking-widest uppercase flex items-center gap-8 marquee-glow">
           <span><i className="fa-solid fa-bolt mr-2" /> Protocolo ModBus TCP-IP</span>
           <span>•</span>
           <span><i className="fa-solid fa-shield-cat mr-2" /> Procesamiento Local First</span>
