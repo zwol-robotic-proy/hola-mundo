@@ -1,103 +1,40 @@
 {
   "compilerOptions": {
-    "target": "ES2023",
-
+    "target": "ES2022",
     "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2023"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-
-    "allowJs": false,
-
-    "skipLibCheck": true,
-
     "strict": true,
-
-    "noUncheckedIndexedAccess": true,
-
-    "exactOptionalPropertyTypes": true,
-
-    "forceConsistentCasingInFileNames": true,
-
+    "skipLibCheck": true,
     "noEmit": true,
-
-    "esModuleInterop": true,
-
-    "module": "ESNext",
-
-    "moduleResolution": "Bundler",
-
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
     "resolveJsonModule": true,
-
     "isolatedModules": true,
-
-    "jsx": "preserve",
-
+    "esModuleInterop": true,
     "incremental": true,
-
     "plugins": [
       {
         "name": "next"
       }
     ],
-
-    "baseUrl": ".",
-
     "paths": {
       "@/*": [
         "./src/*"
-      ],
-
-      "@/app/*": [
-        "./src/app/*"
-      ],
-
-      "@/components/*": [
-        "./src/components/*"
-      ],
-
-      "@/hooks/*": [
-        "./src/hooks/*"
-      ],
-
-      "@/lib/*": [
-        "./src/lib/*"
-      ],
-
-      "@/providers/*": [
-        "./src/providers/*"
-      ],
-
-      "@/styles/*": [
-        "./src/styles/*"
-      ],
-
-      "@/types/*": [
-        "./src/types/*"
-      ],
-
-      "@/utils/*": [
-        "./src/utils/*"
-      ],
-
-      "@/config/*": [
-        "./src/config/*"
-      ],
-
-      "@/assets/*": [
-        "./src/assets/*"
       ]
-    }
+    },
+    "allowJs": true
   },
-
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
-
   "exclude": [
     "node_modules"
   ]

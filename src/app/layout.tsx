@@ -8,22 +8,18 @@ import { ScrollProgress } from "@/components/hero/ScrollProgress";
 
 const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap"
+  variable: "--font-manrope",
 });
 
 const syne = Syne({
   subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap"
+  variable: "--font-syne",
 });
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap"
+  variable: "--font-space-grotesk",
 });
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://zwol-home.com"),
 
@@ -117,28 +113,22 @@ type RootLayoutProps = Readonly<{
 }>;
 
 export default function RootLayout({
-  children
-}: RootLayoutProps) {
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html
-      lang="es-419"
-      suppressHydrationWarning
-      className={`${manrope.variable} ${syne.variable} ${spaceGrotesk.variable}`}
-    >
+    <html lang="es" className="scroll-smooth">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
+      </head>
       <body
-        className={[
-          "bg-[var(--zw-black)]",
-          "text-[var(--zw-silver)]",
-          "antialiased",
-        ].join(" ")}
+        className={`${manrope.variable} ${syne.variable} ${spaceGrotesk.variable} antialiased selection:bg-zwol-cyan selection:text-black font-sans`}
       >
-        <Providers>
-
-          <ScrollProgress />
-
-          {children}
-
-        </Providers>
+        {children}
       </body>
     </html>
   );

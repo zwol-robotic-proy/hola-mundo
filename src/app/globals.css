@@ -1,396 +1,86 @@
 @import "tailwindcss";
 
-/* ==========================================================
-   ZWOL HOME DESIGN SYSTEM
-   Next.js 16 + Tailwind CSS v4
-========================================================== */
-
+@theme {
+  --color-zwol-black: #030509;
+  --color-zwol-dark: #0A0E17;
+  --color-zwol-card: #111726;
+  --color-zwol-cyan: #00d2ff;
+  --color-zwol-blue: #2563eb;
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-syne);
+  --font-mono: var(--font-space-grotesk);
+}
 :root {
-  /* Brand */
-
-  --zw-black: #030509;
-  --zw-dark: #0a0e17;
-  --zw-card: #111726;
-
-  --zw-cyan: #00d2ff;
-  --zw-blue: #2563eb;
-  --zw-indigo: #4f46e5;
-
-  --zw-white: #ffffff;
-  --zw-silver: #e2e8f0;
-  --zw-gray: #94a3b8;
-
-  /* Radius */
-
-  --radius-sm: .75rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 2rem;
-
-  /* Shadows */
-
-  --shadow-cyan:
-    0 0 20px rgba(0,210,255,.18);
-
-  --shadow-card:
-    0 20px 60px rgba(0,0,0,.45);
-
-  /* Navbar */
-
-  --navbar-height: 82px;
+  --cursor-size: 10px;
+  --accent-cyan: #00d2ff;
 }
 
-*,
-*::before,
-*::after{
-  box-sizing:border-box;
+body {
+  background-color: #030509;
+  color: #E2E8F0;
+  overflow-x: hidden;
+  margin: 0;
 }
 
-html{
-  scroll-behavior:smooth;
+.title-hero {
+  font-size: clamp(1.8rem, 3.4vw, 3.4rem);
+  line-height: 1.15;
 }
 
-body{
-
-  margin:0;
-
-  background:var(--zw-black);
-
-  color:var(--zw-silver);
-
-  overflow-x:hidden;
-
-  text-rendering:optimizeLegibility;
-
-  -webkit-font-smoothing:antialiased;
-
-  -moz-osx-font-smoothing:grayscale;
+.title-section {
+  font-size: clamp(2rem, 4vw, 3.75rem);
+  line-height: 1.1;
 }
 
-/* ==========================================================
-   Scrollbar
-========================================================== */
-
-::-webkit-scrollbar{
-    width:8px;
+.title-card {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
 }
 
-::-webkit-scrollbar-track{
-    background:var(--zw-black);
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #030509; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #00d2ff; }
+
+.glass-panel {
+  background: linear-gradient(135deg, rgba(17, 23, 38, 0.7) 0%, rgba(10, 14, 23, 0.8) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(0, 210, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
-::-webkit-scrollbar-thumb{
-    background:#243040;
-    border-radius:999px;
+.glass-card-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card-hover:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 210, 255, 0.4);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 210, 255, 0.15);
 }
 
-::-webkit-scrollbar-thumb:hover{
-    background:var(--zw-cyan);
+.img-container {
+  overflow: hidden;
+  position: relative;
+  border-radius: 1.5rem;
+}
+.img-container img {
+  width: 100%;
+  height: 115%;
+  object-fit: cover;
+  transition: transform 0.7s ease, filter 0.7s ease;
+  filter: brightness(0.9) contrast(1.05);
+}
+.img-container:hover img {
+  transform: scale(1.03);
+  filter: brightness(1) contrast(1.1);
 }
 
-/* Firefox */
-
-*{
-    scrollbar-width:thin;
-    scrollbar-color:var(--zw-cyan) var(--zw-black);
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ==========================================================
-   Typography
-========================================================== */
-
-h1,h2,h3,h4{
-
-    margin:0;
-
-    line-height:1.05;
-
-    letter-spacing:-.03em;
-}
-
-p{
-
-    margin:0;
-
-    color:#b8c3d1;
-
-    line-height:1.75;
-}
-
-/* ==========================================================
-   Selection
-========================================================== */
-
-::selection{
-
-    background:var(--zw-cyan);
-
-    color:black;
-}
-
-/* ==========================================================
-   Images
-========================================================== */
-
-img{
-
-    max-width:100%;
-
-    display:block;
-}
-
-/* ==========================================================
-   Glass Components
-========================================================== */
-
-.glass{
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.06),
-            rgba(255,255,255,.02)
-        );
-
-    border:1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:blur(20px);
-
-    -webkit-backdrop-filter:blur(20px);
-
-    box-shadow:var(--shadow-card);
-
-    border-radius:var(--radius-lg);
-}
-
-.glass-card{
-
-    transition:
-        transform .45s cubic-bezier(.22,.61,.36,1),
-        border-color .35s,
-        box-shadow .35s;
-}
-
-.glass-card:hover{
-
-    transform:translateY(-8px);
-
-    border-color:rgba(0,210,255,.30);
-
-    box-shadow:
-
-        var(--shadow-card),
-
-        var(--shadow-cyan);
-}
-
-/* ==========================================================
-   Gradient Text
-========================================================== */
-
-.gradient-text{
-
-    background:
-
-        linear-gradient(
-            90deg,
-            #00d2ff,
-            #4facfe,
-            #818cf8
-        );
-
-    -webkit-background-clip:text;
-
-    background-clip:text;
-
-    color:transparent;
-}
-
-/* ==========================================================
-   Buttons
-========================================================== */
-
-.btn-primary{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:.75rem;
-
-    padding:1rem 2rem;
-
-    border-radius:999px;
-
-    border:none;
-
-    cursor:pointer;
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--zw-cyan),
-            var(--zw-blue)
-        );
-
-    color:black;
-
-    font-weight:700;
-
-    transition:.35s;
-}
-
-.btn-primary:hover{
-
-    transform:translateY(-3px);
-
-    box-shadow:
-        0 0 35px rgba(0,210,255,.35);
-}
-
-.btn-secondary{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:1rem 2rem;
-
-    border-radius:999px;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    background:rgba(255,255,255,.03);
-
-    transition:.35s;
-}
-
-.btn-secondary:hover{
-
-    border-color:var(--zw-cyan);
-
-    background:rgba(255,255,255,.05);
-}
-
-/* ==========================================================
-   Containers
-========================================================== */
-
-.container-zw{
-
-    width:min(1440px,92%);
-
-    margin-inline:auto;
-}
-
-/* ==========================================================
-   Utilities
-========================================================== */
-
-.text-shadow{
-
-    text-shadow:
-        0 0 20px rgba(0,210,255,.25);
-}
-
-.border-gradient{
-
-    position:relative;
-}
-
-.border-gradient::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    padding:1px;
-
-    border-radius:inherit;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(0,210,255,.4),
-            transparent
-        );
-
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-
-    -webkit-mask-composite:xor;
-
-    mask-composite:exclude;
-
-    pointer-events:none;
-}
-
-/* ==========================================================
-   Animations
-========================================================== */
-
-@keyframes float{
-
-    0%,100%{
-
-        transform:translateY(0);
-    }
-
-    50%{
-
-        transform:translateY(-8px);
-    }
-}
-
-.float{
-
-    animation:float 6s ease-in-out infinite;
-}
-
-@keyframes fadeUp{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(30px);
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:none;
-    }
-}
-
-.fade-up{
-
-    animation:fadeUp .8s ease forwards;
-}
-
-/* ==========================================================
-   Safari Fixes
-========================================================== */
-
-@supports (-webkit-touch-callout:none){
-
-    body{
-
-        min-height:-webkit-fill-available;
-    }
-
-    .glass{
-
-        backdrop-filter:blur(18px);
-
-        -webkit-backdrop-filter:blur(18px);
-    }
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-in-out;
 }

@@ -184,28 +184,24 @@ export function Hero() {
               sm:flex-row
             "
           >
-            <Button
-              asChild
-              size="xl"
-            >
-              <Link href="/cotizador">
+            <Link href="/cotizador">
+              <Button
+                size="xl"
+                rightIcon={<ArrowRight className="h-5 w-5" />}
+              >
                 Comenzar Proyecto
+              </Button>
+            </Link>
 
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-            </Button>
-
-            <Button
-              asChild
-              variant="secondary"
-              size="xl"
-            >
-              <Link href="#concepto">
-                <Cpu className="h-5 w-5" />
-
+            <Link href="#concepto">
+              <Button
+                variant="secondary"
+                size="xl"
+                leftIcon={<Cpu className="h-5 w-5" />}
+              >
                 Descubrir Tecnología
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </motion.div>
 
           <motion.div
