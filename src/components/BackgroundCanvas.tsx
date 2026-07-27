@@ -54,6 +54,17 @@ export default function BackgroundCanvas() {
     const pointCloud = new THREE.Points(geometry, material);
     scene.add(pointCloud);
 
+    // Crear líneas de conexión (sinapsis/neuronas)
+    const lineGeometry = new THREE.BufferGeometry();
+    const lineMaterial = new THREE.LineBasicMaterial({
+      color: 0x00d2ff,
+      transparent: true,
+      opacity: 0.2,
+      wireframe: false,
+    });
+    const lineSegments = new THREE.LineSegments(lineGeometry, lineMaterial);
+    scene.add(lineSegments);
+
     let mouseX = 0;
     let mouseY = 0;
 
@@ -79,6 +90,32 @@ export default function BackgroundCanvas() {
         if (Math.abs(pos[i * 3 + 2]) > 150) velocities[i].z *= -1;
       }
       pointCloud.geometry.attributes.position.needsUpdate = true;
+
+      // Actualizar líneas de conexión (sinapsis)
+      const linePositions: number[] = [];
+      const maxDistance = 60; // Distancia máxima para conectar partículas
+      
+      for (let i = 0; i < count; i++) {
+        for (let j = i + 1; j < count; j++) {
+          const dx = pos[i * 3] - pos[j * 3];
+          const dy = pos[i * 3 + 1] - pos[j * 3 + 1];
+          const dz = pos[i * 3 + 2] - pos[j * 3 + 2];
+          const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+          if (distance < maxDistance) {
+            // Agregar línea de conexión
+            linePositions.push(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
+            linePositions.push(pos[j * 3], pos[j * 3 + 1], pos[j * 3 + 2]);
+          }
+        }
+      }
+
+      if (linePositions.length > 0) {
+        lineGeometry.dispose();
+        const newLineGeometry = new THREE.BufferGeometry();
+        newLineGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(linePositions), 3));
+        lineSegments.geometry = newLineGeometry;
+      }
 
       pointCloud.rotation.y += 0.0008;
       pointCloud.rotation.x += 0.0004;
@@ -106,6 +143,8 @@ export default function BackgroundCanvas() {
       cancelAnimationFrame(animId);
       geometry.dispose();
       material.dispose();
+      lineGeometry.dispose();
+      lineMaterial.dispose();
       renderer.dispose();
     };
   }, []);

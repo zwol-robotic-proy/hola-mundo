@@ -10,9 +10,15 @@
   --font-display: var(--font-syne);
   --font-mono: var(--font-space-grotesk);
 }
+
 :root {
   --cursor-size: 10px;
   --accent-cyan: #00d2ff;
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
 }
 
 body {
@@ -20,6 +26,19 @@ body {
   color: #E2E8F0;
   overflow-x: hidden;
   margin: 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+html.light body {
+  background-color: #f8f9fa;
+  color: #1a1a1a;
+}
+
+html.light {
+  --color-zwol-black: #f8f9fa;
+  --color-zwol-dark: #f0f1f3;
+  --color-zwol-card: #e8eaed;
+  --accent-cyan: #0080a3;
 }
 
 .title-hero {

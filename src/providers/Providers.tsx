@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 
 interface ProvidersProps {
@@ -11,13 +12,15 @@ export function Providers({
   children,
 }: ProvidersProps) {
   return (
-    <>
-      {children}
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      <>
+        {children}
 
-      <Toaster
-        richColors
-        position="top-right"
-      />
-    </>
+        <Toaster
+          richColors
+          position="top-right"
+        />
+      </>
+    </ThemeProvider>
   );
 }
