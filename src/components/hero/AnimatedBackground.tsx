@@ -9,6 +9,7 @@ import {
 } from "@react-three/drei";
 
 import { HeroParticles } from "./HeroParticles";
+import { GradientOrbs } from "./GradientOrbs";
 
 export function AnimatedBackground() {
   return (
@@ -52,6 +53,29 @@ export function AnimatedBackground() {
           <Environment preset="city" />
         </Suspense>
       </Canvas>
+
+      <GradientOrbs />
+
+      <div
+        className={[
+          "absolute",
+          "inset-0",
+          "bg-[radial-gradient(circle_at_center,rgba(0,210,255,.12),transparent_70%)]",
+        ].join(" ")}
+      />
+
+      <div
+        className={[
+          "absolute",
+          "bottom-0",
+          "left-0",
+          "right-0",
+          "h-60",
+          "bg-gradient-to-t",
+          "from-[#030509]",
+          "to-transparent",
+        ].join(" ")}
+      />
 
       <div
         className="

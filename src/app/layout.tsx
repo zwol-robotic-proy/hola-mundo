@@ -4,6 +4,7 @@ import { Manrope, Space_Grotesk, Syne } from "next/font/google";
 import "./globals.css";
 
 import { Providers } from "@/providers/Providers";
+import { ScrollProgress } from "@/components/hero/ScrollProgress";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -120,21 +121,23 @@ export default function RootLayout({
 }: RootLayoutProps) {
   return (
     <html
-      lang="es"
+      lang="es-419"
       suppressHydrationWarning
       className={`${manrope.variable} ${syne.variable} ${spaceGrotesk.variable}`}
     >
       <body
-        className="
-          bg-[var(--zw-black)]
-          text-[var(--zw-silver)]
-          antialiased
-          selection:bg-cyan-400
-          selection:text-black
-        "
+        className={[
+          "bg-[var(--zw-black)]",
+          "text-[var(--zw-silver)]",
+          "antialiased",
+        ].join(" ")}
       >
         <Providers>
+
+          <ScrollProgress />
+
           {children}
+
         </Providers>
       </body>
     </html>
