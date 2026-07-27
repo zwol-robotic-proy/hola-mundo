@@ -42,10 +42,46 @@ export default function CotizadorView({ onCancel }: CotizadorProps) {
 
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 1));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`¡Excelente ${formData.nombre}! Configuración procesada por ZWOL-CORE con éxito. ¡Nos pondremos en contacto con usted a la brevedad!`);
-    onCancel();
+    
+    // Preparar datos del formulario
+    const cotizacionData = {
+      nombre: formData.nombre,
+      telefono: formData.telefono,
+      email: formData.email,
+      tipoProp: formData.tipoProp,
+      habitaciones: formData.habitaciones,
+      circuitos: formData.circuitos,
+      m2: formData.m2,
+      pileta: formData.pileta,
+      riego: formData.riego,
+      confort: formData.confort,
+      internet: formData.internet,
+      solar: formData.solar,
+      notas: formData.notas,
+      timestamp: new Date().toISOString(),
+      appUrl: process.env.NEXT_PUBLIC_APP_URL,
+    };
+
+    try {
+      // Enviar cotización a través de API
+      const response = await fetch('/api/cotizaciones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cotizacionData),
+      });
+
+      if (!response.ok) throw new Error('Error al enviar cotización');
+
+      alert(
+        `¡Excelente ${formData.nombre}! 🎉\n\nTu configuración ha sido procesada exitosamente por ZWOL-CORE.\nNos pondremos en contacto a través del email: ${formData.email}\n\n¡Gracias por tu confianza!`
+      );
+      onCancel();
+    } catch (error) {
+      console.error('Error en la cotización:', error);
+      alert('Hubo un error al procesar tu cotización. Por favor intenta de nuevo.');
+    }
   };
 
   return (
