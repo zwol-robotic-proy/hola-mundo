@@ -14,13 +14,15 @@ export default function Home() {
     <main className="min-h-screen bg-zwol-black text-slate-200 relative overflow-x-hidden">
       <BackgroundCanvas />
       <CustomCursor />
-      
+
       <Navbar currentView={currentView} setCurrentView={setCurrentView} />
 
       {currentView === "home" ? (
         <HomeView onOpenCotizador={() => setCurrentView("cotizador")} />
       ) : (
-        <CotizadorView onCancel={() => setCurrentView("home")} />
+        <div style={{ color: "red", fontSize: 40 }}>
+          EL FORMULARIO DEBERÍA ESTAR AQUÍ
+        </div>
       )}
     </main>
   );

@@ -41,9 +41,16 @@ export async function POST(req: NextRequest) {
     const transporter = nodemailer.createTransport({
       host: smtpHost,
       port: smtpPort,
-      secure: smtpSecure,
-      auth: smtpUser && smtpPass ? { user: smtpUser, pass: smtpPass } : undefined,
+      secure: smtpPort === 465,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
     });
+
+    // Verificar conexión SMTP antes de enviar
+    await transporter.verify();
+    console.log("✅ SMTP conectado correctamente");
 
     const detailsList = Object.entries(projectData)
       .map(([label, value]) => `<li><strong>${escapeHtml(label)}:</strong> ${escapeHtml(String(value))}</li>`)
