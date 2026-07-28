@@ -20,9 +20,9 @@ export default function Home() {
       {currentView === "home" ? (
         <HomeView onOpenCotizador={() => setCurrentView("cotizador")} />
       ) : (
-        <div style={{ color: "red", fontSize: 40 }}>
-          EL FORMULARIO DEBERÍA ESTAR AQUÍ
-        </div>
+      
+          <CotizadorView onBack={() => setCurrentView("home")} />
+      
       )}
     </main>
   );
