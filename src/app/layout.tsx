@@ -5,6 +5,8 @@ import "./globals.css";
 
 import { Providers } from "@/providers/Providers";
 import { ScrollProgress } from "@/components/hero/ScrollProgress";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -128,6 +130,8 @@ export default function RootLayout({
       <body
         className={`${manrope.variable} ${syne.variable} ${spaceGrotesk.variable} antialiased selection:bg-zwol-cyan selection:text-black font-sans`}
       >
+        <Analytics />
+        <SpeedInsights />
         {children}
       </body>
     </html>
