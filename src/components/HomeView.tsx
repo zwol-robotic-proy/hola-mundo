@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { buildWhatsAppLink, contactConfig } from "@/lib/contact";
+
 interface HomeViewProps {
   onOpenCotizador: () => void;
 }
@@ -408,10 +411,17 @@ export default function HomeView({ onOpenCotizador }: HomeViewProps) {
               <p>Infraestructura Domótica Industrial</p>
               <p>Buenos Aires, ARG</p>
             </div>
-            <div className="text-left md:text-center">
-              <p className="text-white font-bold mb-1">ESPECIFICACIONES</p>
-              <p>Protocolo ModBus TCP-IP</p>
-              <p>Procesamiento Local First</p>
+            <div className="text-left md:text-center space-y-2">
+              <p className="text-white font-bold mb-1">CONTACTO</p>
+              <a href={buildWhatsAppLink(contactConfig.phone, contactConfig.whatsappMessage)} target="_blank" rel="noreferrer" className="block hover:text-zwol-cyan transition-colors">
+                {contactConfig.phoneDisplay} · WhatsApp
+              </a>
+              <a href={`mailto:${contactConfig.email}`} className="block hover:text-zwol-cyan transition-colors">
+                {contactConfig.email}
+              </a>
+              <Link href={contactConfig.instagramUrl} target="_blank" rel="noreferrer" className="block hover:text-zwol-cyan transition-colors">
+                {contactConfig.instagramLabel}
+              </Link>
             </div>
             <div className="text-left md:text-right">
               <p>&copy; 2026 ZWOL-HOME.</p>

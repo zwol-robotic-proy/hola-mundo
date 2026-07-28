@@ -20,13 +20,19 @@ export async function POST(request: Request) {
 
   const React = await import('react')
   const { renderToStaticMarkup } = await import('react-dom/server')
-  const EmailTemplate = (await import('../../../components/EmailTemplate')).default
+  const EmailTemplate = (await import('../src/components/EmailTemplate')).default
 
   const element = React.createElement(EmailTemplate, {
     name,
     email,
+    phone: '',
     subject,
     message,
+    projectData: {},
+    appUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://zwol-home.com',
+    contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'zwolhome@gmail.com',
+    instagramUrl: process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/zwol.robotic?igsh=MXJ4c2QyMWt0aDgzbQ==',
+    instagramLabel: process.env.NEXT_PUBLIC_INSTAGRAM_LABEL || '@zwol.robotic',
   });
 
   const bodyHtml = `<!DOCTYPE html>${renderToStaticMarkup(element)}`;

@@ -120,7 +120,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="scroll-smooth">
+    <html lang="es" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <link
           rel="stylesheet"
@@ -132,7 +132,7 @@ export default function RootLayout({
       >
         <Analytics />
         <SpeedInsights />
-        {children}
+        <Providers>{children}</Providers>
       </body>  
        {/*//1136834491   https://www.instagram.com/zwol.robotic?igsh=MXJ4c2QyMWt0aDgzbQ==    Gmail: zwolhome@gmail.com  @robot123*/}
     </html>

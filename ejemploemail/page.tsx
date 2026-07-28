@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ContactForm, Footer, Navbar, WppButtom } from "../../components";
+import { ContactForm, Footer, Navbar, WppButtom } from "../components";
 
 export default function ContactPage() {
   return (

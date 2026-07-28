@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface CotizadorProps {
   onCancel: () => void;
@@ -61,7 +62,7 @@ export default function CotizadorView({ onCancel }: CotizadorProps) {
       solar: formData.solar,
       notas: formData.notas,
       timestamp: new Date().toISOString(),
-      appUrl: process.env.NEXT_PUBLIC_APP_URL,
+      appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://zwol-home.com",
     };
 
     try {
@@ -74,13 +75,18 @@ export default function CotizadorView({ onCancel }: CotizadorProps) {
 
       if (!response.ok) throw new Error('Error al enviar cotización');
 
-      alert(
-        `¡Excelente ${formData.nombre}! 🎉\n\nTu configuración ha sido procesada exitosamente por ZWOL-CORE.\nNos pondremos en contacto a través del email: ${formData.email}\n\n¡Gracias por tu confianza!`
-      );
-      onCancel();
+      toast.success("Cotización enviada correctamente", {
+        description: `${formData.nombre} · ${formData.email} · ${formData.tipoProp}`,
+      });
+
+      window.setTimeout(() => {
+        onCancel();
+      }, 1200);
     } catch (error) {
       console.error('Error en la cotización:', error);
-      alert('Hubo un error al procesar tu cotización. Por favor intenta de nuevo.');
+      toast.error("No se pudo enviar la cotización", {
+        description: "Revisa los datos o intenta nuevamente en unos minutos.",
+      });
     }
   };
 
