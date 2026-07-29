@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
       <div class="card">
         <div class="header">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: #030509; color: #00d2ff; display: flex; align-items: center; justify-content: center; font-size: 20px;"> <img src="https://zwol-home.com/images/Logo.jpeg" alt="ZWOL-HOME"  width="40" height="40"/> </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #030509; color: #00d2ff; display: flex; align-items: center; justify-content: center; font-size: 20px;"> <img src="https://www.zwol.com.ar/images/Logo.jpeg" alt="ZWOL-HOME"  width="40" height="40"/> </div>
             <h1 style="margin: 0;">Nueva cotización recibida</h1>
           </div>
           <p>ZWOL-HOME · Proyecto premium de automatización residencial</p>
