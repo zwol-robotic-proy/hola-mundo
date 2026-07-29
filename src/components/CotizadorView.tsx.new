@@ -17,16 +17,16 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
     nombre: "",
     telefono: "",
     email: "",
-    tipoProp: "Vivienda Personal.",
-    habitaciones: "4 a 6.",
-    circuitos: "Hasta 30.",
+    tipoProp: "Vivienda Personal",
+    habitaciones: "4 a 6",
+    circuitos: "Hasta 30",
     m2: "",
     noRecuerdoM2: false,
-    pileta: "Sí (Automatizar bomba/filtrado).",
-    riego: "Sí (Integrar al sistema).",
+    pileta: "Sí (Automatizar bomba/filtrado)",
+    riego: "Sí (Integrar al sistema)",
     confort: [] as string[],
-    internet: "Starlink (Satelital Alta Velocidad).",
-    solar: "Sí: Respaldo solar independiente (Core + Pantalla + Red).",
+    internet: "Starlink (Satelital Alta Velocidad)",
+    solar: "Sí: Respaldo solar independiente (Core + Pantalla + Red)",
     notas: "",
   });
 
@@ -382,18 +382,18 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
               <div className="flex flex-col sm:flex-row items-stretch justify-between gap-3 pt-2">
                 <button
                   type="button"
-                  onClick={() => setShowPreview(false)}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-white font-mono text-xs uppercase tracking-wider"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="button"
                   onClick={() => handleSubmit()}
                   disabled={isSubmitting}
                   className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-zwol-cyan to-blue-600 text-zwol-black font-bold text-xs uppercase tracking-wider disabled:opacity-60"
                 >
                   {isSubmitting ? "Enviando..." : "Enviar"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowPreview(false)}
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-white font-mono text-xs uppercase tracking-wider"
+                >
+                  Cancelar
                 </button>
               </div>
             </div>

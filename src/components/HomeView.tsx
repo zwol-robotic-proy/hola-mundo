@@ -8,6 +8,17 @@ interface HomeViewProps {
 }
 
 export default function HomeView({ onOpenCotizador }: HomeViewProps) {
+  const marqueeItems = [
+    { icon: "fa-bolt", label: "Protocolo ModBus TCP-IP" },
+    { icon: "fa-shield-cat", label: "Procesamiento Local First" },
+    { icon: "fa-network-wired", label: "Topología Descentralizada" },
+    { icon: "fa-display", label: "Pantalla Táctil HMI 10\"" },
+    { icon: "fa-infinity", label: "Hasta 160 Nodos de Entrada / Salida" },
+    { icon: "fa-house-signal", label: "Integración Home Assistant" },
+  ];
+
+  const marqueeContent = [...marqueeItems, ...marqueeItems];
+
   return (
     <div className="relative z-10 pt-28">
       {/* HERO SECTION */}
@@ -82,22 +93,15 @@ export default function HomeView({ onOpenCotizador }: HomeViewProps) {
         <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zwol-dark via-zwol-dark/50 to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zwol-dark via-zwol-dark/50 to-transparent z-10 pointer-events-none" />
         
-        <div className="animate-marquee whitespace-nowrap font-mono text-xs md:text-sm text-zwol-cyan tracking-widest uppercase flex items-center gap-8 marquee-glow">
-          <span><i className="fa-solid fa-bolt mr-2" /> Protocolo ModBus TCP-IP</span>
-          <span>•</span>
-          <span><i className="fa-solid fa-shield-cat mr-2" /> Procesamiento Local First</span>
-          <span>•</span>
-          <span><i className="fa-solid fa-network-wired mr-2" /> Topología Descentralizada</span>
-          <span>•</span>
-          <span><i className="fa-solid fa-display mr-2" /> Pantalla Táctil HMI 10"</span>
-          <span>•</span>
-          <span><i className="fa-solid fa-infinity mr-2" /> Hasta 160 Nodos de Entrada / Salida</span>
-          <span>•</span>
-          <span><i className="fa-solid fa-house-signal mr-2" /> Integración Home Assistant</span>
-          <span>•</span>
-          <span><i className="fa-solid fa-bolt mr-2" /> Protocolo ModBus TCP-IP</span>
-          <span>•</span>
-          <span><i className="fa-solid fa-shield-cat mr-2" /> Procesamiento Local First</span>
+        <div className="animate-marquee whitespace-nowrap font-mono text-xs md:text-sm text-zwol-cyan tracking-widest uppercase flex items-center marquee-glow">
+          {marqueeContent.map((item, index) => (
+            <div key={`${item.label}-${index}`} className="flex items-center shrink-0">
+              <span className="mx-4 md:mx-6">
+                <i className={`fa-solid ${item.icon} mr-2`} />
+                {item.label}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -414,14 +418,15 @@ export default function HomeView({ onOpenCotizador }: HomeViewProps) {
             <div className="text-left md:text-center space-y-2">
               <p className="text-white font-bold mb-1">CONTACTO</p>
               <a href={buildWhatsAppLink(contactConfig.phone, contactConfig.whatsappMessage)} target="_blank" rel="noreferrer" className="block hover:text-zwol-cyan transition-colors">
-                {contactConfig.phoneDisplay} · WhatsApp
+                <i className="fa-brands fa-whatsapp" />  { contactConfig.phoneDisplay}
               </a>
               <a href={`mailto:${contactConfig.email}`} className="block hover:text-zwol-cyan transition-colors">
-                {contactConfig.email}
+                <i className="fa-solid fa-envelope" /> {" "} { contactConfig.email}
               </a>
               <Link href={contactConfig.instagramUrl} target="_blank" rel="noreferrer" className="block hover:text-zwol-cyan transition-colors">
-                {contactConfig.instagramLabel}
+                <i className="fa-brands fa-instagram" />  { contactConfig.instagramLabel}
               </Link>
+              
             </div>
             <div className="text-left md:text-right">
               <p>&copy; 2026 ZWOL-HOME.</p>

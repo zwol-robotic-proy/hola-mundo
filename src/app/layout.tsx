@@ -133,8 +133,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         <Providers>{children}</Providers>
-      </body>  
-       {/*//1136834491   https://www.instagram.com/zwol.robotic?igsh=MXJ4c2QyMWt0aDgzbQ==    Gmail: zwolhome@gmail.com  @robot123*/}
+      </body>
     </html>
   );
 }

@@ -39,11 +39,11 @@ export default function EmailTemplate({
     : [];
 
   return (
-    <html lang="es">
+    <html lang="es-419">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Nueva cotización - ZWOL-HOME</title>
+        <title>⚡ Nueva cotización recibida <strong>ZWOL-HOME</strong></title>
         <style>{`
           body {
             margin: 0;
@@ -63,6 +63,7 @@ export default function EmailTemplate({
             max-width: 680px;
             margin: 0 auto;
             background: rgba(10, 14, 23, 0.96);
+            color: #ffffff
             border: 1px solid rgba(0, 210, 255, 0.25);
             border-radius: 24px;
             overflow: hidden;
@@ -90,7 +91,7 @@ export default function EmailTemplate({
             margin-bottom: 12px;
             padding: 12px 14px;
             border-radius: 12px;
-            background: rgba(255,255,255,0.05);
+            background: rgb(255, 255, 255);
             border: 1px solid rgba(255,255,255,0.08);
           }
           .field strong {
@@ -105,9 +106,10 @@ export default function EmailTemplate({
             margin-top: 10px;
             padding: 14px;
             border-radius: 12px;
-            background: #f8fafc;
+            background: #ffffff;
             color: #111827;
             line-height: 1.6;
+            border: 1px solid #e5e7eb;
           }
           .details {
             margin-top: 22px;
@@ -148,21 +150,55 @@ export default function EmailTemplate({
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#030509', color: '#00d2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
                   ⚡
                 </div>
-                <h1 style={{ margin: 0 }}>Nueva cotización recibida</h1>
+                <h1 style={{ margin: 0 }}>Nueva cotización</h1>
               </div>
               <p>ZWOL-HOME · Proyecto premium de automatización residencial</p>
             </div>
 
             <div className="content">
+              <div className="field">
+                <strong>FECHA: </strong>
+                <div>{new Date().toLocaleDateString()}</div>
+              </div>
               {fields.map((field) => (
                 <div className="field" key={field.label}>
                   <strong>{field.label}</strong>
-                  <div>{field.value}</div>
+
+                    {field.label === "Email" ? (
+                    <a
+                      href={`mailto:${field.value}`}
+                      style={{
+                        color: "#00d2ff",
+                        textDecoration: "none",
+                      }}
+                    >
+                      {field.value}
+                    </a>
+                    ) : field.label === "Teléfono" ? (
+                      <a
+                        href={`https://wa.me/54${field.value.replace(/\D/g, "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                        color: "#00d2ff",
+                        textDecoration: "none",
+                        }}
+                      >
+                        {field.value}
+                      </a>
+                    ) : (
+                      <div className="message-box">
+                        {field.value}
+                      </div>
+                    )}
+                  </div>
+                  ))}
+                </div>
                 </div>
               ))}
 
               <div className="field">
-                <strong>Mensaje</strong>
+                <strong>Mensaje </strong>
                 <div className="message-box" dangerouslySetInnerHTML={{ __html: (message || "Sin observaciones").replace(/\n/g, "<br />") }} />
               </div>
 

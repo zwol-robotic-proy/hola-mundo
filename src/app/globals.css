@@ -116,9 +116,9 @@ html.light {
 
 .animate-marquee {
   display: flex;
-  width: 200%;
-  animation: marquee 28s linear infinite;
-  gap: 2rem;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+  will-change: transform;
 }
 
 .marquee-glow {
