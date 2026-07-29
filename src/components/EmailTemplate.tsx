@@ -193,8 +193,6 @@ export default function EmailTemplate({
                     )}
                   </div>
                   ))}
-                </div>
-                </div>
 
               <div className="field">
                 <strong>Mensaje </strong>
