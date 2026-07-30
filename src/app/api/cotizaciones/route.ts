@@ -39,7 +39,6 @@ export async function POST(req: NextRequest) {
       'Confort': body.confort?.length ? body.confort.join(', ') : 'Sin opciones de confort',
       'Internet': body.internet,
       'Solar': body.solar,
-      'Notas': body.notas || 'Sin observaciones adicionales',
     };
 
     let transporter: nodemailer.Transporter | null = null;
@@ -95,7 +94,7 @@ export async function POST(req: NextRequest) {
       <div class="card">
         <div class="header">
           <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: #030509; color: #00d2ff; display: flex; align-items: center; justify-content: center; font-size: 20px;"> <img src="https://www.zwol.com.ar/images/Logo.jpeg" alt="ZWOL-HOME"  width="40" height="40"/> </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #030509; color: #00d2ff; display: flex; align-items: center; justify-content: center; font-size: 20px;"> <img src="https://oa7wcdk05oqhgv2n.public.blob.vercel-storage.com/WhatsApp%20Image%202026-07-27%20at%206.48.17%20PM.jpeg" alt="ZWOL-HOME"  width="40" height="40"/> </div>
             <h1 style="margin: 0;">Nueva cotización recibida</h1>
           </div>
           <p>ZWOL-HOME · Proyecto premium de automatización residencial</p>
@@ -116,7 +115,7 @@ export async function POST(req: NextRequest) {
           <p>Este mensaje fue enviado desde el formulario de cotización de ZWOL-HOME.</p>
           <p>Web: <a href="${appUrl}">${appUrl}</a> · Email: <a href="mailto:${contactEmail}">${contactEmail}</a></p>
           <p>Instagram: <a href="${contactConfig.instagramUrl}">${contactConfig.instagramLabel}</a></p>
-          <p style="margin-top: 10px; white-space: pre-line; color: #cbd5e1;">${escapeHtml(emailSignature)}</p>
+          <p style="margin-top: 10px; white-space: pre-line; color: #cbd5e1;">${emailSignature}</p>
         </div>
       </div>
     </div>
