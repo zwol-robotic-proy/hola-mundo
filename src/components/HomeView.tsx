@@ -248,7 +248,7 @@ export default function HomeView({ onOpenCotizador }: HomeViewProps) {
 
           <div className="lg:col-span-6">
             <div className="img-container aspect-square glass-panel p-2 hover-target">
-              <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop" alt="Servidores e Infraestructura" />
+              <img src="https://oa7wcdk05oqhgv2n.public.blob.vercel-storage.com/WhatsApp%20Image%202026-07-28%20at%208.32.27%20AM%20%281%29.jpeg" alt="Servidores e Infraestructura" />
             </div>
           </div>
         </div>

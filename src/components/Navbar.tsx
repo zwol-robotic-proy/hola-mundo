@@ -21,8 +21,8 @@ export default function Navbar({ currentView, setCurrentView }: NavbarProps) {
     <nav className="fixed top-0 w-full z-50 py-4 px-6 md:px-12 transition-all duration-300 bg-zwol-black/90 dark:bg-zwol-black/90 light:bg-white/90 backdrop-blur-md border-b border-white/5 dark:border-white/5 light:border-gray-200/20">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <button onClick={() => setCurrentView("home")} className="flex items-center gap-3 group text-left">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-zwol-cyan to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,210,255,0.4)]">
-            <i className="fa-solid fa-microchip text-white dark:text-zwol-black light:text-white text-lg" />
+          <div className="w-10 h-10 flex items-center justify-center">
+            <img src="https://oa7wcdk05oqhgv2n.public.blob.vercel-storage.com/WhatsApp%20Image%202026-07-27%20at%206.48.17%20PM.jpeg" alt="Logoo" className="border rounded-full" />
           </div>
           <span className="font-display font-bold text-xl md:text-2xl tracking-tight text-white dark:text-white light:text-zwol-black uppercase">
             Zwol<span className="text-zwol-cyan">-</span>Home
@@ -40,7 +40,7 @@ export default function Navbar({ currentView, setCurrentView }: NavbarProps) {
         )}
 
         <div className="flex items-center gap-3 md:gap-4">
-          {mounted && (
+          {/* {mounted && (
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="group relative w-12 h-12 rounded-full bg-white/10 dark:bg-white/10 light:bg-gray-200/30 border border-white/20 dark:border-white/20 light:border-gray-300/30 flex items-center justify-center hover:bg-white/20 dark:hover:bg-white/20 light:hover:bg-gray-300/40 transition-all duration-300 overflow-hidden"
@@ -55,7 +55,7 @@ export default function Navbar({ currentView, setCurrentView }: NavbarProps) {
                 <i className="fa-solid fa-moon text-slate-400 text-lg relative z-10 transition-transform group-hover:scale-110" />
               )}
             </button>
-          )}
+          )} */}
 
           <button
             onClick={() => setCurrentView("cotizador")}
