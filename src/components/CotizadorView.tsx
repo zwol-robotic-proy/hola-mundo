@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { toast } from "sonner";
 
 interface CotizadorProps {
@@ -28,7 +28,43 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
     internet: "Starlink (Satelital Alta Velocidad).",
     solar: "Sí: Respaldo solar independiente (Core + Pantalla + Red).",
     notas: "",
+    sistemaSolar: "No",
+    heatingType: "Sin losa radiante",
+    heatingZones: "",
+    camerasPresent: "No",
+    camerasWithSolar: "No",
+    camerasCount: "",
+    wifi: "Sí",
+    sprinklersCount: "",
+    irrigationZones: "",
   });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalClosing, setModalClosing] = useState(false);
+
+  useEffect(() => {
+    if (showPreview) {
+      setModalOpen(true);
+      return;
+    }
+
+    if (modalOpen) {
+      setModalClosing(true);
+      const t = setTimeout(() => {
+        setModalOpen(false);
+        setModalClosing(false);
+      }, 220);
+      return () => clearTimeout(t);
+    }
+  }, [showPreview]);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev || "";
+    };
+  }, [modalOpen]);
 
   const frases = [
     "⚡ Cada vez más cerca de tener tu casa inteligente.",
@@ -47,6 +83,15 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
     { label: "Pileta", value: formData.pileta },
     { label: "Riego", value: formData.riego },
     { label: "Internet", value: formData.internet },
+    { label: "Sistema Solar", value: formData.sistemaSolar || "No informado" },
+    { label: "Calefacción (tipo)", value: formData.heatingType || "No informado" },
+    { label: "Zonas de calefacción", value: formData.heatingZones || "No informado" },
+    { label: "Cámaras", value: formData.camerasPresent || "No informado" },
+    { label: "Cantidad de cámaras", value: formData.camerasCount || "No informado" },
+    { label: "Cámaras con paneles solares", value: formData.camerasWithSolar || "No informado" },
+    { label: "WiFi / Red", value: formData.wifi || "No informado" },
+    { label: "Aspersores (cantidad)", value: formData.sprinklersCount || "No informado" },
+    { label: "Zonas de riego", value: formData.irrigationZones || "No informado" },
     { label: "Observaciones", value: formData.notas || "Sin observaciones adicionales" },
   ];
 
@@ -314,6 +359,129 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
                   />
                 </div>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Sistema Solar</label>
+                  <select
+                    value={formData.sistemaSolar}
+                    onChange={(e) => setFormData({ ...formData, sistemaSolar: e.target.value })}
+                    className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
+                  >
+                    <option value="No">No</option>
+                    <option value="Sí (Respaldo)">Sí (Respaldo)</option>
+                    <option value="Sí (Principal)">Sí (Principal)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Tipo de Calefacción (losa)</label>
+                  <select
+                    value={formData.heatingType}
+                    onChange={(e) => setFormData({ ...formData, heatingType: e.target.value })}
+                    className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
+                  >
+                    <option value="Sin losa radiante">Sin losa radiante</option>
+                    <option value="Losa radiante c/ caldera">Losa radiante c/ caldera</option>
+                    <option value="Losa radiante c/ resistencia">Losa radiante c/ resistencia</option>
+                  </select>
+                </div>
+
+                {formData.heatingType && formData.heatingType !== "Sin losa radiante" && (
+                  <div>
+                    <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Zonas de calefacción (cantidad)</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={formData.heatingZones}
+                      onChange={(e) => setFormData({ ...formData, heatingZones: e.target.value })}
+                      placeholder="Ej. 3"
+                      className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">WiFi / Red</label>
+                  <select
+                    value={formData.wifi}
+                    onChange={(e) => setFormData({ ...formData, wifi: e.target.value })}
+                    className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
+                  >
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                    <option value="Mesh / Empresarial">Mesh / Empresarial</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Cámaras de seguridad (posee)</label>
+                  <select
+                    value={formData.camerasPresent}
+                    onChange={(e) => setFormData({ ...formData, camerasPresent: e.target.value })}
+                    className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
+                  >
+                    <option value="No">No</option>
+                    <option value="Sí">Sí</option>
+                  </select>
+                </div>
+
+                {formData.camerasPresent === "Sí" && (
+                  <>
+                    <div>
+                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Cantidad de cámaras</label>
+                      <input
+                        type="number"
+                        min={0}
+                        value={formData.camerasCount}
+                        onChange={(e) => setFormData({ ...formData, camerasCount: e.target.value })}
+                        placeholder="Ej. 4"
+                        className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Cámaras con paneles solares</label>
+                      <select
+                        value={formData.camerasWithSolar}
+                        onChange={(e) => setFormData({ ...formData, camerasWithSolar: e.target.value })}
+                        className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
+                      >
+                        <option value="No">No</option>
+                        <option value="Sí">Sí</option>
+                      </select>
+                    </div>
+                  </>
+                )}
+
+                {formData.riego && formData.riego.startsWith("Sí") && (
+                  <>
+                    <div>
+                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Aspersores (cantidad)</label>
+                      <input
+                        type="number"
+                        min={0}
+                        value={formData.sprinklersCount}
+                        onChange={(e) => setFormData({ ...formData, sprinklersCount: e.target.value })}
+                        placeholder="Ej. 10"
+                        className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Zonas de riego (cantidad)</label>
+                      <input
+                        type="number"
+                        min={0}
+                        value={formData.irrigationZones}
+                        onChange={(e) => setFormData({ ...formData, irrigationZones: e.target.value })}
+                        placeholder="Ej. 2"
+                        className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           )}
 
@@ -361,41 +529,39 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
         </form>
       </div>
 
-      {showPreview && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 px-4 py-6">
-          <div className="w-full max-w-2xl rounded-3xl border border-zwol-cyan/30 bg-zwol-dark/95 p-6 md:p-8 shadow-[0_0_50px_rgba(0,210,255,0.25)]">
-            <div className="space-y-5">
-              <div className="space-y-2">
-                <h3 className="font-display font-bold text-white text-xl uppercase">Revisa tu consulta</h3>
-                <p className="text-sm text-gray-400">Confirma tus respuestas antes de enviar.</p>
-              </div>
+      {modalOpen && (
+        <div className={`fixed inset-0 z-[60] bg-black/80 px-4 py-6 flex items-end md:items-center justify-center transition-opacity duration-200 ease-out ${modalClosing ? "opacity-0" : "opacity-100"}`}>
+          <div className={`w-full h-full md:h-auto md:max-h-[90vh] max-w-3xl mx-auto rounded-t-3xl md:rounded-3xl md:my-6 border border-zwol-cyan/30 bg-zwol-dark/95 p-4 md:p-10 shadow-[0_0_50px_rgba(0,210,255,0.25)] overflow-hidden flex flex-col transform transition-all duration-200 ease-out ${modalClosing ? "translate-y-6 opacity-0" : "translate-y-0 opacity-100"}`}>
+            <div className="space-y-2">
+              <h3 className="font-display font-bold text-white text-xl uppercase">Revisa tu consulta</h3>
+              <p className="text-sm text-gray-400">Confirma tus respuestas antes de enviar.</p>
+            </div>
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4 space-y-3">
-                {reviewItems.map((item) => (
-                  <div key={item.label} className="flex flex-col gap-1 border-b border-white/10 pb-2 last:border-b-0 last:pb-0">
-                    <span className="text-[10px] uppercase tracking-widest text-zwol-cyan">{item.label}</span>
-                    <span className="text-sm text-gray-200">{item.value}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4 md:p-6 mt-4 mb-4 overflow-y-auto flex-1">
+              {reviewItems.map((item) => (
+                <div key={item.label} className="flex flex-col gap-1 border-b border-white/10 pb-2 last:border-b-0 last:pb-0">
+                  <span className="text-[10px] uppercase tracking-widest text-zwol-cyan">{item.label}</span>
+                  <span className="text-sm text-gray-200">{item.value}</span>
+                </div>
+              ))}
+            </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch justify-between gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowPreview(false)}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-white font-mono text-xs uppercase tracking-wider"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSubmit()}
-                  disabled={isSubmitting}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-zwol-cyan to-blue-600 text-zwol-black font-bold text-xs uppercase tracking-wider disabled:opacity-60"
-                >
-                  {isSubmitting ? "Enviando..." : "Enviar"}
-                </button>
-              </div>
+            <div className="flex flex-col sm:flex-row items-stretch justify-between gap-3 pt-2 md:pt-4 flex-shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowPreview(false)}
+                className="w-full sm:w-auto px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-white font-mono text-xs uppercase tracking-wider"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSubmit()}
+                disabled={isSubmitting}
+                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-zwol-cyan to-blue-600 text-zwol-black font-bold text-xs uppercase tracking-wider disabled:opacity-60"
+              >
+                {isSubmitting ? "Enviando..." : "Enviar"}
+              </button>
             </div>
           </div>
         </div>
