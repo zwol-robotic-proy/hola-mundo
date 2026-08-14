@@ -2,13 +2,16 @@
 
 import { useState, useEffect, type FormEvent } from "react";
 import { toast } from "sonner";
+import { translations, type Language } from "@/lib/translations";
 
 interface CotizadorProps {
   onCancel?: () => void;
   onBack?: () => void;
+  language: Language;
 }
 
-export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
+export default function CotizadorView({ onCancel, onBack, language }: CotizadorProps) {
+  const t = translations[language].cotizador;
   const [step, setStep] = useState(1);
   const [showPreview, setShowPreview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,13 +52,13 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
 
     if (modalOpen) {
       setModalClosing(true);
-      const t = setTimeout(() => {
+      const timeout = setTimeout(() => {
         setModalOpen(false);
         setModalClosing(false);
       }, 220);
-      return () => clearTimeout(t);
+      return () => clearTimeout(timeout);
     }
-  }, [showPreview]);
+  }, [showPreview, modalOpen]);
 
   useEffect(() => {
     if (!modalOpen) return;
@@ -67,37 +70,37 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
   }, [modalOpen]);
 
   const frases = [
-    "⚡ Cada vez más cerca de tener tu casa inteligente.",
-    "🚀 Arquitectura industrial y soft de vanguardia para tu propiedad.",
-    "🔒 Soberanía absoluta, seguridad y control total en tus manos.",
-    "🌟 Estás a un solo paso de elevar el estándar de tu hogar.",
+    t.ctaBanner,
+    t.ctaBanner2,
+    t.ctaBanner3,
+    t.ctaBanner4,
   ];
 
   const reviewItems = [
-    { label: "Nombre", value: formData.nombre || "No informado" },
-    { label: "Teléfono", value: formData.telefono || "No informado" },
-    { label: "Email", value: formData.email || "No informado" },
-    { label: "Propiedad", value: formData.tipoProp },
-    { label: "Habitaciones", value: formData.habitaciones },
-    { label: "Circuitos", value: formData.circuitos },
-    { label: "Pileta", value: formData.pileta },
-    { label: "Riego", value: formData.riego },
-    { label: "Internet", value: formData.internet },
-    { label: "Sistema Solar", value: formData.sistemaSolar || "No informado" },
-    { label: "Calefacción (tipo)", value: formData.heatingType || "No informado" },
-    { label: "Zonas de calefacción", value: formData.heatingZones || "No informado" },
-    { label: "Cámaras", value: formData.camerasPresent || "No informado" },
-    { label: "Cantidad de cámaras", value: formData.camerasCount || "No informado" },
-    { label: "Cámaras con paneles solares", value: formData.camerasWithSolar || "No informado" },
-    { label: "WiFi / Red", value: formData.wifi || "No informado" },
-    { label: "Aspersores (cantidad)", value: formData.sprinklersCount || "No informado" },
-    { label: "Zonas de riego", value: formData.irrigationZones || "No informado" },
-    { label: "Observaciones", value: formData.notas || "Sin observaciones adicionales" },
+    { label: t.review.nombre, value: formData.nombre || t.review.notInformed },
+    { label: t.review.telefono, value: formData.telefono || t.review.notInformed },
+    { label: t.review.email, value: formData.email || t.review.notInformed },
+    { label: t.review.propiedad, value: formData.tipoProp },
+    { label: t.review.habitaciones, value: formData.habitaciones },
+    { label: t.review.circuitos, value: formData.circuitos },
+    { label: t.review.pileta, value: formData.pileta },
+    { label: t.review.riego, value: formData.riego },
+    { label: t.review.internet, value: formData.internet },
+    { label: t.review.sistemaSolar, value: formData.sistemaSolar || t.review.notInformed },
+    { label: t.review.heatingType, value: formData.heatingType || t.review.notInformed },
+    { label: t.review.heatingZones, value: formData.heatingZones || t.review.notInformed },
+    { label: t.review.camerasPresent, value: formData.camerasPresent || t.review.notInformed },
+    { label: t.review.camerasCount, value: formData.camerasCount || t.review.notInformed },
+    { label: t.review.camerasWithSolar, value: formData.camerasWithSolar || t.review.notInformed },
+    { label: t.review.wifi, value: formData.wifi || t.review.notInformed },
+    { label: t.review.sprinklersCount, value: formData.sprinklersCount || t.review.notInformed },
+    { label: t.review.irrigationZones, value: formData.irrigationZones || t.review.notInformed },
+    { label: t.review.notas, value: formData.notas || t.review.emptyObservations },
   ];
 
   const handleNext = () => {
     if (step === 1 && (!formData.nombre || !formData.email || !formData.telefono)) {
-      alert("Por favor completa nombre, teléfono y correo electrónico para continuar.");
+      alert(t.alertRequired);
       return;
     }
     setStep((prev) => Math.min(prev + 1, 4));
@@ -172,17 +175,15 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
             <i className="fa-solid fa-circle-check" />
           </div>
           <div className="space-y-3">
-            <h2 className="font-display font-bold text-white text-2xl uppercase">Consulta enviada</h2>
-            <p className="text-gray-300 text-sm md:text-base">
-              Gracias por confiar en ZWOL-HOME. Nos pondremos en contacto a la brevedad.
-            </p>
+            <h2 className="font-display font-bold text-white text-2xl uppercase">{t.successTitle}</h2>
+            <p className="text-gray-300 text-sm md:text-base">{t.successText}</p>
           </div>
           <button
             type="button"
             onClick={handleClose}
             className="px-7 py-3 rounded-xl bg-zwol-cyan text-zwol-black font-bold text-xs uppercase tracking-wider"
           >
-            Volver al inicio
+            {t.successButton}
           </button>
         </div>
       </div>
@@ -194,10 +195,10 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
       <div className="glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden border border-zwol-cyan/30 space-y-8">
         <div className="space-y-3 text-center">
           <span className="text-zwol-cyan font-mono text-xs uppercase tracking-widest">
-            Bienvenido a tu Ecosistema
+            {t.welcome}
           </span>
           <h1 className="font-display font-bold text-white uppercase text-2xl md:text-3xl tracking-tight">
-            Configura tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-zwol-cyan to-blue-500">Instalación</span>
+            {t.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-zwol-cyan to-blue-500">{t.titleAccent}</span>
           </h1>
           <div className="font-mono text-xs text-zwol-cyan tracking-wider bg-zwol-cyan/5 py-2 px-4 rounded-full inline-block border border-zwol-cyan/20">
             {frases[step - 1]}
@@ -207,55 +208,53 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
           {step === 1 && (
             <div className="space-y-4 animate-fade-in">
-              <h3 className="font-display font-bold text-white text-lg border-b border-white/10 pb-2">
-                01. Datos del Propietario
-              </h3>
+              <h3 className="font-display font-bold text-white text-lg border-b border-white/10 pb-2">{t.formStep1}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Nombre y Apellido</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.nombre}</label>
                   <input
                     type="text"
                     required
                     value={formData.nombre}
                     onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                    placeholder="Ej. Alfredo Gómez"
+                    placeholder={t.placeholders.nombre}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Teléfono / WhatsApp</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.telefono}</label>
                   <input
                     type="tel"
                     required
                     value={formData.telefono}
                     onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-                    placeholder="+54 11 ..."
+                    placeholder={t.placeholders.telefono}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Correo Electrónico</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.email}</label>
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="tu@correo.com"
+                    placeholder={t.placeholders.email}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Tipo de Propiedad</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.tipoProp}</label>
                   <select
                     value={formData.tipoProp}
                     onChange={(e) => setFormData({ ...formData, tipoProp: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="Vivienda Personal">Vivienda Personal</option>
-                    <option value="Casa de Fin de Semana">Casa de Fin de Semana</option>
-                    <option value="Comercial / Oficina">Comercial / Oficina</option>
+                    <option value="Vivienda Personal">{t.options.tipoProp.personal}</option>
+                    <option value="Casa de Fin de Semana">{t.options.tipoProp.weekend}</option>
+                    <option value="Comercial / Oficina">{t.options.tipoProp.commercial}</option>
                   </select>
                 </div>
               </div>
@@ -264,34 +263,32 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
 
           {step === 2 && (
             <div className="space-y-4 animate-fade-in">
-              <h3 className="font-display font-bold text-white text-lg border-b border-white/10 pb-2">
-                02. Dimensiones de la Propiedad
-              </h3>
+              <h3 className="font-display font-bold text-white text-lg border-b border-white/10 pb-2">{t.formStep2}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Cantidad de Habitaciones</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.habitaciones}</label>
                   <select
                     value={formData.habitaciones}
                     onChange={(e) => setFormData({ ...formData, habitaciones: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="1 a 3">1 a 3 Habitaciones</option>
-                    <option value="4 a 6">4 a 6 Habitaciones (Standard)</option>
-                    <option value="7 a 10">7 a 10 Habitaciones (Residencia)</option>
-                    <option value="10+">Más de 10 Habitaciones</option>
+                    <option value="1 a 3">{t.options.habitaciones["1"]}</option>
+                    <option value="4 a 6">{t.options.habitaciones["2"]}</option>
+                    <option value="7 a 10">{t.options.habitaciones["3"]}</option>
+                    <option value="10+">{t.options.habitaciones["4"]}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Circuitos de Luces</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.circuitos}</label>
                   <select
                     value={formData.circuitos}
                     onChange={(e) => setFormData({ ...formData, circuitos: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="Hasta 15">Hasta 15 circuitos</option>
-                    <option value="Hasta 30">Hasta 30 circuitos</option>
-                    <option value="Hasta 60">Hasta 60 circuitos (DALI/DMX)</option>
-                    <option value="160 Nodos">Infraestructura Máxima (160 Nodos)</option>
+                    <option value="Hasta 15">{t.options.circuitos["1"]}</option>
+                    <option value="Hasta 30">{t.options.circuitos["2"]}</option>
+                    <option value="Hasta 60">{t.options.circuitos["3"]}</option>
+                    <option value="160 Nodos">{t.options.circuitos["4"]}</option>
                   </select>
                 </div>
               </div>
@@ -300,30 +297,28 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
 
           {step === 3 && (
             <div className="space-y-4 animate-fade-in">
-              <h3 className="font-display font-bold text-white text-lg border-b border-white/10 pb-2">
-                03. Exteriores & Automatización
-              </h3>
+              <h3 className="font-display font-bold text-white text-lg border-b border-white/10 pb-2">{t.formStep3}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">¿Posee Pileta?</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.pileta}</label>
                   <select
                     value={formData.pileta}
                     onChange={(e) => setFormData({ ...formData, pileta: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="Sí (Automatizar bomba/filtrado)">Sí (Incluir automatización de bomba)</option>
-                    <option value="No">No posee</option>
+                    <option value="Sí (Automatizar bomba/filtrado)">{t.options.pileta.yes}</option>
+                    <option value="No">{t.options.pileta.no}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">¿Posee Riego Automático?</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.riego}</label>
                   <select
                     value={formData.riego}
                     onChange={(e) => setFormData({ ...formData, riego: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="Sí (Integrar al sistema)">Sí (Integrar al núcleo Zwol-Core)</option>
-                    <option value="No">No posee</option>
+                    <option value="Sí (Integrar al sistema)">{t.options.riego.yes}</option>
+                    <option value="No">{t.options.riego.no}</option>
                   </select>
                 </div>
               </div>
@@ -332,29 +327,27 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
 
           {step === 4 && (
             <div className="space-y-4 animate-fade-in">
-              <h3 className="font-display font-bold text-white text-lg border-b border-white/10 pb-2">
-                04. Conectividad & Autonomía
-              </h3>
+              <h3 className="font-display font-bold text-white text-lg border-b border-white/10 pb-2">{t.formStep4}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Internet Principal</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.internet}</label>
                   <select
                     value={formData.internet}
                     onChange={(e) => setFormData({ ...formData, internet: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="Starlink (Satelital Alta Velocidad)">Starlink (Satelital)</option>
-                    <option value="Fibra Óptica (Movistar / Flow)">Fibra Óptica (Local)</option>
-                    <option value="Redundante (Ambas)">Redundante (Doble Enlace)</option>
+                    <option value="Starlink (Satelital Alta Velocidad)">{t.options.internet.starlink}</option>
+                    <option value="Fibra Óptica (Movistar / Flow)">{t.options.internet.fibra}</option>
+                    <option value="Redundante (Ambas)">{t.options.internet.redundant}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Observaciones</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.notas}</label>
                   <textarea
                     rows={2}
                     value={formData.notas}
                     onChange={(e) => setFormData({ ...formData, notas: e.target.value })}
-                    placeholder="Detalles particulares..."
+                    placeholder={t.placeholders.notas}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   />
                 </div>
@@ -362,93 +355,93 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Sistema Solar</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.sistemaSolar}</label>
                   <select
                     value={formData.sistemaSolar}
                     onChange={(e) => setFormData({ ...formData, sistemaSolar: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="No">No</option>
-                    <option value="Sí (Respaldo)">Sí (Respaldo)</option>
-                    <option value="Sí (Principal)">Sí (Principal)</option>
+                    <option value="No">{t.options.sistemaSolar.no}</option>
+                    <option value="Sí (Respaldo)">{t.options.sistemaSolar.yesBackup}</option>
+                    <option value="Sí (Principal)">{t.options.sistemaSolar.yesMain}</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Tipo de Calefacción (losa)</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.heatingType}</label>
                   <select
                     value={formData.heatingType}
                     onChange={(e) => setFormData({ ...formData, heatingType: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="Sin losa radiante">Sin losa radiante</option>
-                    <option value="Losa radiante c/ caldera">Losa radiante c/ caldera</option>
-                    <option value="Losa radiante c/ resistencia">Losa radiante c/ resistencia</option>
+                    <option value="Sin losa radiante">{t.options.heatingType.none}</option>
+                    <option value="Losa radiante c/ caldera">{t.options.heatingType.boiler}</option>
+                    <option value="Losa radiante c/ resistencia">{t.options.heatingType.resistance}</option>
                   </select>
                 </div>
 
                 {formData.heatingType && formData.heatingType !== "Sin losa radiante" && (
                   <div>
-                    <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Zonas de calefacción (cantidad)</label>
+                    <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.heatingZones}</label>
                     <input
                       type="number"
                       min={0}
                       value={formData.heatingZones}
                       onChange={(e) => setFormData({ ...formData, heatingZones: e.target.value })}
-                      placeholder="Ej. 3"
+                      placeholder={t.placeholders.heatingZones}
                       className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">WiFi / Red</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.wifi}</label>
                   <select
                     value={formData.wifi}
                     onChange={(e) => setFormData({ ...formData, wifi: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="Sí">Sí</option>
-                    <option value="No">No</option>
-                    <option value="Mesh / Empresarial">Mesh / Empresarial</option>
+                    <option value="Sí">{t.options.wifi.yes}</option>
+                    <option value="No">{t.options.wifi.no}</option>
+                    <option value="Mesh / Empresarial">{t.options.wifi.mesh}</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Cámaras de seguridad (posee)</label>
+                  <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.camerasPresent}</label>
                   <select
                     value={formData.camerasPresent}
                     onChange={(e) => setFormData({ ...formData, camerasPresent: e.target.value })}
                     className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                   >
-                    <option value="No">No</option>
-                    <option value="Sí">Sí</option>
+                    <option value="No">{t.options.camerasPresent.no}</option>
+                    <option value="Sí">{t.options.camerasPresent.yes}</option>
                   </select>
                 </div>
 
                 {formData.camerasPresent === "Sí" && (
                   <>
                     <div>
-                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Cantidad de cámaras</label>
+                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.camerasCount}</label>
                       <input
                         type="number"
                         min={0}
                         value={formData.camerasCount}
                         onChange={(e) => setFormData({ ...formData, camerasCount: e.target.value })}
-                        placeholder="Ej. 4"
+                        placeholder={t.placeholders.camerasCount}
                         className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Cámaras con paneles solares</label>
+                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.camerasWithSolar}</label>
                       <select
                         value={formData.camerasWithSolar}
                         onChange={(e) => setFormData({ ...formData, camerasWithSolar: e.target.value })}
                         className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                       >
-                        <option value="No">No</option>
-                        <option value="Sí">Sí</option>
+                        <option value="No">{t.options.camerasWithSolar.no}</option>
+                        <option value="Sí">{t.options.camerasWithSolar.yes}</option>
                       </select>
                     </div>
                   </>
@@ -457,25 +450,25 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
                 {formData.riego && formData.riego.startsWith("Sí") && (
                   <>
                     <div>
-                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Aspersores (cantidad)</label>
+                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.sprinklersCount}</label>
                       <input
                         type="number"
                         min={0}
                         value={formData.sprinklersCount}
                         onChange={(e) => setFormData({ ...formData, sprinklersCount: e.target.value })}
-                        placeholder="Ej. 10"
+                        placeholder={t.placeholders.sprinklersCount}
                         className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">Zonas de riego (cantidad)</label>
+                      <label className="block font-mono text-xs text-gray-300 uppercase mb-1">{t.labels.irrigationZones}</label>
                       <input
                         type="number"
                         min={0}
                         value={formData.irrigationZones}
                         onChange={(e) => setFormData({ ...formData, irrigationZones: e.target.value })}
-                        placeholder="Ej. 2"
+                        placeholder={t.placeholders.irrigationZones}
                         className="w-full bg-zwol-dark border border-white/10 rounded-xl p-3.5 text-white font-mono text-sm focus:border-zwol-cyan focus:outline-none"
                       />
                     </div>
@@ -492,7 +485,7 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
                 onClick={handleClose}
                 className="px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-mono text-xs uppercase tracking-wider hover:bg-white/10 transition-all"
               >
-                Volver al Inicio
+                {t.buttons.backHome}
               </button>
               {step > 1 && (
                 <button
@@ -500,7 +493,7 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
                   onClick={handlePrev}
                   className="px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-mono text-xs uppercase tracking-wider hover:bg-white/10 transition-all"
                 >
-                  Anterior
+                  {t.buttons.previous}
                 </button>
               )}
             </div>
@@ -512,7 +505,7 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
                   onClick={handleNext}
                   className="px-8 py-3.5 rounded-xl bg-zwol-cyan text-zwol-black font-bold text-xs uppercase tracking-wider hover:bg-white transition-all shadow-[0_0_20px_rgba(0,210,255,0.3)]"
                 >
-                  Siguiente
+                  {t.buttons.next}
                 </button>
               ) : (
                 <button
@@ -521,7 +514,7 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
                   disabled={isSubmitting}
                   className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-zwol-cyan to-blue-600 text-zwol-black font-bold text-xs uppercase tracking-wider hover:shadow-[0_0_25px_rgba(0,210,255,0.5)] transition-all disabled:opacity-60"
                 >
-                  Revisar consulta
+                  {t.buttons.review}
                 </button>
               )}
             </div>
@@ -533,8 +526,8 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
         <div className={`fixed inset-0 z-[60] bg-black/80 px-4 py-6 flex items-end md:items-center justify-center transition-opacity duration-200 ease-out ${modalClosing ? "opacity-0" : "opacity-100"}`}>
           <div className={`w-full h-full md:h-auto md:max-h-[90vh] max-w-3xl mx-auto rounded-t-3xl md:rounded-3xl md:my-6 border border-zwol-cyan/30 bg-zwol-dark/95 p-4 md:p-10 shadow-[0_0_50px_rgba(0,210,255,0.25)] overflow-hidden flex flex-col transform transition-all duration-200 ease-out ${modalClosing ? "translate-y-6 opacity-0" : "translate-y-0 opacity-100"}`}>
             <div className="space-y-2">
-              <h3 className="font-display font-bold text-white text-xl uppercase">Revisa tu consulta</h3>
-              <p className="text-sm text-gray-400">Confirma tus respuestas antes de enviar.</p>
+              <h3 className="font-display font-bold text-white text-xl uppercase">{t.reviewTitle}</h3>
+              <p className="text-sm text-gray-400">{t.reviewSubtitle}</p>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4 md:p-6 mt-4 mb-4 overflow-y-auto flex-1">
@@ -552,7 +545,7 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
                 onClick={() => setShowPreview(false)}
                 className="w-full sm:w-auto px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-white font-mono text-xs uppercase tracking-wider"
               >
-                Cancelar
+                {t.buttons.cancel}
               </button>
               <button
                 type="button"
@@ -560,7 +553,7 @@ export default function CotizadorView({ onCancel, onBack }: CotizadorProps) {
                 disabled={isSubmitting}
                 className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-zwol-cyan to-blue-600 text-zwol-black font-bold text-xs uppercase tracking-wider disabled:opacity-60"
               >
-                {isSubmitting ? "Enviando..." : "Enviar"}
+                {isSubmitting ? t.buttons.sending : t.buttons.send}
               </button>
             </div>
           </div>
