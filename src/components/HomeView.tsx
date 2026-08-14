@@ -94,9 +94,13 @@ export default function HomeView({ onOpenCotizador, language }: HomeViewProps) {
         <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zwol-dark via-zwol-dark/50 to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zwol-dark via-zwol-dark/50 to-transparent z-10 pointer-events-none" />
 
-        <div className="animate-marquee whitespace-nowrap font-mono text-xs md:text-sm text-zwol-cyan tracking-widest uppercase flex items-center marquee-glow">
-          {marqueeContent.map((item, index) => (
-            <div key={`${item.label}-${index}`} className="flex items-center shrink-0">
+
+        <div className="marquee-track flex items-center w-max whitespace-nowrap font-mono text-xs md:text-sm text-zwol-cyan tracking-widest uppercase marquee-glow">
+          {[...marqueeContent, ...marqueeContent].map((item, index) => (
+            <div
+              key={`${item.label}-${index}`}
+              className="flex items-center shrink-0"
+            >
               <span className="mx-4 md:mx-6">
                 <i className={`fa-solid ${item.icon} mr-2`} />
                 {item.label}
@@ -104,6 +108,30 @@ export default function HomeView({ onOpenCotizador, language }: HomeViewProps) {
             </div>
           ))}
         </div>
+
+
+        <style jsx>{`
+                @keyframes marquee {
+                  0% {
+                    transform: translateX(0);
+                  }
+
+
+                  100% {
+                    transform: translateX(-50%);
+                  }
+                }
+
+
+                .marquee-track {
+                  animation: marquee 50s linear infinite;
+                }
+
+
+                .marquee-track:hover {
+                  animation-play-state: paused;
+                }
+              `}</style>
       </div>
 
       <section id="concepto" className="py-20 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
