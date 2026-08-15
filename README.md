@@ -81,45 +81,7 @@ npm test -- src/lib/__tests__/translations.test.ts
 | `translations.ts` | 10 | ✅ 100% |
 | **Total** | **57** | **✅ 100%** |
 
-## 📊 Estructura del Proyecto
-
-```
-src/
-├── app/                       # Next.js App Router
-├── components/                # Componentes React (SOLID)
-├── lib/                       # Utilidades y lógica
-│   ├── utils.ts
-│   ├── contact.ts
-│   ├── translations.ts
-│   ├── __tests__/            # Tests (100% coverage)
-│   └── docs/                 # Documentación detallada
-├── providers/                # Contextos (LanguageContext)
-└── middleware.ts             # Seguridad y CSP
-```
-
-## 🔐 Seguridad
-
-### Política de CSP (Content Security Policy)
-
-El proyecto implementa una política de seguridad mediante `middleware.ts`:
-
-```
-✅ Content-Security-Policy       # Previene XSS
-✅ X-Content-Type-Options       # Previene MIME sniffing
-✅ X-Frame-Options              # Previene clickjacking
-✅ Strict-Transport-Security    # Fuerza HTTPS
-✅ Referrer-Policy              # Privacidad de referencias
-✅ Permissions-Policy           # Control de features del navegador
-```
-
 Ver [`src/middleware.ts`](src/middleware.ts) para más detalles.
-
-## 📚 Documentación
-
-- [INDEX.md](INDEX.md) - Índice de toda la documentación
-- [TESTING_GUIDE.md](TESTING_GUIDE.md) - Guía completa de testing
-- [src/lib/README.md](src/lib/README.md) - Overview de la librería
-- [SOLID_ARCHITECTURE.md](SOLID_ARCHITECTURE.md) - Detalles de principios SOLID
 
 ## 🏗️ Arquitectura SOLID
 
