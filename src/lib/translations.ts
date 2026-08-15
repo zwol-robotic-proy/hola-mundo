@@ -1,10 +1,23 @@
-export type Language = "es" | "pt" | "en";
+/**
+ * Sistema de Traducciones Modular
+ * Implementa: Single Responsibility Principle (SRP)
+ * Cada idioma en su propio módulo para mejor escalabilidad
+ */
+
+export type Language = 'es' | 'pt' | 'en'
 
 export const languageOptions = [
-  { value: "es", label: "Español" },
-  { value: "pt", label: "Português" },
-  { value: "en", label: "English" },
-] as const;
+  { value: 'es' as const, label: 'Español' },
+  { value: 'pt' as const, label: 'Português' },
+  { value: 'en' as const, label: 'English' },
+] as const
+
+/**
+ * Validador de idioma type-safe
+ */
+export function isValidLanguage(lang: unknown): lang is Language {
+  return languageOptions.some(opt => opt.value === lang)
+}
 
 export const translations = {
   es: {
