@@ -52,7 +52,7 @@ export const translations = {
         topology: "Topología Descentralizada",
         hmi: "Pantalla Táctil HMI 10\"",
         nodes: "Hasta 160 Nodos de Entrada / Salida",
-        assistant: "Integración Home Assistant",
+        assistant: "Integración ZWOL OS",
       },
       sections: {
         philosophyLabel: "01. Filosofía de Integración",
@@ -126,7 +126,7 @@ export const translations = {
         ecosystemTitleAccent: "Abierto",
         ecosystemText:
           "Integración nativa respaldada por Home Assistant y compatibilidad con las principales plataformas globales de consumo.",
-        homeAssistant: "Home Assistant",
+        homeAssistant: "ZWOL OS",
         homeAssistantText: "Núcleo de automatización local más avanzado.",
         appleHome: "Apple HomeKit",
         appleHomeText: "Sincronización fluida con iOS y Siri local.",
@@ -328,7 +328,7 @@ export const translations = {
         topology: "Topologia Descentralizada",
         hmi: "Tela Tátil HMI 10\"",
         nodes: "Até 160 Nós de Entrada / Saída",
-        assistant: "Integração Home Assistant",
+        assistant: "Integração ZWOL OS",
       },
       sections: {
         philosophyLabel: "01. Filosofia da Integração",
@@ -603,7 +603,7 @@ export const translations = {
         topology: "Decentralized Topology",
         hmi: "10\" HMI Touch Panel",
         nodes: "Up to 160 Input / Output Nodes",
-        assistant: "Home Assistant Integration",
+        assistant: "ZWOL OS Integration",
       },
       sections: {
         philosophyLabel: "01. Integration Philosophy",
