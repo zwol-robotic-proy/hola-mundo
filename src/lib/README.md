@@ -176,7 +176,7 @@ Sistema centralizado de traducciones multiidioma (Español, Portugués, Inglés)
 #### 1. Navegación (`nav`)
 - `concept` - "01. Concepto"
 - `challenge` - "02. El Desafío"
-- `engineering` - "03. ModBus TCP-IP"
+- `engineering` - "03. Arquitectura Robusta"
 - `control` - "04. Interfaces"
 - `ecosystem` - "05. Ecosistema"
 - `startProject` - Botón CTA

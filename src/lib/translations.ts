@@ -24,14 +24,14 @@ export const translations = {
     nav: {
       concept: "01. Concepto",
       challenge: "02. El Desafío",
-      engineering: "03. ModBus TCP-IP",
+      engineering: "03. Arquitectura Robusta",
       control: "04. Interfaces",
       ecosystem: "05. Ecosistema",
       startProject: "Iniciar Proyecto",
       menuToggle: "Abrir menú",
     },
     home: {
-      badge: "Ingeniería Residencial de Alta Gama • Nordelta",
+      badge: "Ingeniería Residencial de Alta Gama",
       heroTitle: "Tu hogar, tus reglas,",
       heroTitleAccent: "soft de vanguardia.",
       heroSubtitle:
@@ -39,7 +39,7 @@ export const translations = {
       quote:
         '"No importa desde dónde lo controles, sino a dónde quieres llegar. Y Zwol-Home lo resuelve."',
       ctaExplore: "Explorar Ecosistema",
-      ctaSpecs: "Especificaciones ModBus",
+      ctaSpecs: "Especificaciones de Integración",
       statBrain: "CEREBRO CENTRAL:",
       statLatency: "LATENCIA DE RED:",
       statNodes: "NODOS FÍSICOS I/O:",
@@ -47,7 +47,7 @@ export const translations = {
       statLatencyValue: "0.2ms (CERO LATENCIA)",
       statNodesValue: "HASTA 160 NODOS",
       marquee: {
-        modbus: "Protocolo ModBus TCP-IP",
+        architecture: "Arquitectura Industrial",
         localFirst: "Procesamiento Local First",
         topology: "Topología Descentralizada",
         hmi: "Pantalla Táctil HMI 10\"",
@@ -96,7 +96,7 @@ export const translations = {
           "Inmune a caídas mundiales de internet. Tu propiedad funciona autónomamente 24 horas al día, 365 días al año.",
         engineeringLabel: "03. Arquitectura Robusta",
         engineeringTitle: "Potencia de Ingeniería",
-        engineeringTitleAccent: "ModBus TCP-IP",
+        engineeringTitleAccent: "Arquitectura Industrial",
         engineeringText:
           "Implementamos el protocolo estándar de la automatización industrial pesada. Una infraestructura alámbrica diseñada para cubrir superficies extensas de más de 1.000 m² sin pérdida de señal.",
         stat160: "NODOS FÍSICOS I/O",
@@ -300,14 +300,14 @@ export const translations = {
     nav: {
       concept: "01. Conceito",
       challenge: "02. O Desafio",
-      engineering: "03. ModBus TCP-IP",
+      engineering: "03. Arquitetura Robusta",
       control: "04. Interfaces",
       ecosystem: "05. Ecossistema",
       startProject: "Iniciar projeto",
       menuToggle: "Abrir menu",
     },
     home: {
-      badge: "Engenharia Residencial de Alto Nível • Nordelta",
+      badge: "Engenharia Residencial de Alto Nível",
       heroTitle: "Sua casa, suas regras,",
       heroTitleAccent: "software de última geração.",
       heroSubtitle:
@@ -315,7 +315,7 @@ export const translations = {
       quote:
         '"Não importa de onde você controla, mas para onde quer chegar. E a Zwol-Home resolve."',
       ctaExplore: "Explorar Ecossistema",
-      ctaSpecs: "Especificações ModBus",
+      ctaSpecs: "Especificações de Integração",
       statBrain: "CÉREBRO CENTRAL:",
       statLatency: "LATÊNCIA DA REDE:",
       statNodes: "NÓS FÍSICOS I/O:",
@@ -323,7 +323,7 @@ export const translations = {
       statLatencyValue: "0.2ms (SEM LATÊNCIA)",
       statNodesValue: "ATÉ 160 NÓS",
       marquee: {
-        modbus: "Protocolo ModBus TCP-IP",
+        architecture: "Arquitetura Industrial",
         localFirst: "Processamento Local First",
         topology: "Topologia Descentralizada",
         hmi: "Tela Tátil HMI 10\"",
@@ -372,7 +372,7 @@ export const translations = {
           "Imune a quedas globais de internet. Sua propriedade funciona de forma autônoma 24 horas por dia, 365 dias por ano.",
         engineeringLabel: "03. Arquitetura Robusta",
         engineeringTitle: "Potência de Engenharia",
-        engineeringTitleAccent: "ModBus TCP-IP",
+        engineeringTitleAccent: "Arquitetura Industrial",
         engineeringText:
           "Implementamos o protocolo padrão da automação industrial pesada. Uma infraestrutura cabeada projetada para cobrir áreas extensas de mais de 1.000 m² sem perda de sinal.",
         stat160: "NÓS FÍSICOS I/O",
@@ -575,14 +575,14 @@ export const translations = {
     nav: {
       concept: "01. Concept",
       challenge: "02. The Challenge",
-      engineering: "03. ModBus TCP-IP",
+      engineering: "03. Robust Architecture",
       control: "04. Interfaces",
       ecosystem: "05. Ecosystem",
       startProject: "Start Project",
       menuToggle: "Open menu",
     },
     home: {
-      badge: "High-End Residential Engineering • Nordelta",
+      badge: "High-End Residential Engineering",
       heroTitle: "Your home, your rules,",
       heroTitleAccent: "cutting-edge software.",
       heroSubtitle:
@@ -590,7 +590,7 @@ export const translations = {
       quote:
         '"It doesn’t matter where you control it from, but where you want to go. And Zwol-Home solves it."',
       ctaExplore: "Explore Ecosystem",
-      ctaSpecs: "ModBus Specifications",
+      ctaSpecs: "Integration Specifications",
       statBrain: "CORE BRAIN:",
       statLatency: "NETWORK LATENCY:",
       statNodes: "PHYSICAL I/O NODES:",
@@ -598,7 +598,7 @@ export const translations = {
       statLatencyValue: "0.2ms (ZERO LATENCY)",
       statNodesValue: "UP TO 160 NODES",
       marquee: {
-        modbus: "ModBus TCP-IP Protocol",
+        architecture: "Industrial Architecture",
         localFirst: "Local First Processing",
         topology: "Decentralized Topology",
         hmi: "10\" HMI Touch Panel",
@@ -647,7 +647,7 @@ export const translations = {
           "Immune to global internet outages. Your property runs autonomously 24 hours a day, 365 days a year.",
         engineeringLabel: "03. Robust Architecture",
         engineeringTitle: "Engineering Power",
-        engineeringTitleAccent: "ModBus TCP-IP",
+        engineeringTitleAccent: "Industrial Architecture",
         engineeringText:
           "We implement the standard protocol of heavy industrial automation. A wired infrastructure designed to cover large surfaces of over 1,000 m² without signal loss.",
         stat160: "PHYSICAL I/O NODES",

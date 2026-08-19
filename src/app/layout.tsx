@@ -31,13 +31,12 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Infraestructura domótica industrial basada en ModBus TCP/IP, Home Assistant y automatización residencial premium.",
+    "Infraestructura domótica industrial basada en Home Assistant y automatización residencial premium.",
 
   keywords: [
     "Domótica",
     "Smart Home",
     "Home Assistant",
-    "ModBus",
     "KNX",
     "Industrial Automation",
     "Zwol Home"

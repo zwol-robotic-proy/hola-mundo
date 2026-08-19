@@ -154,7 +154,7 @@ export function Hero() {
             "
           >
             Infraestructura domótica basada en
-            ModBus TCP/IP, Home Assistant y
+            Home Assistant y
             automatización industrial para crear
             hogares inteligentes de última
             generación.

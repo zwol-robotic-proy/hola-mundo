@@ -140,7 +140,7 @@ describe('Translations Module', () => {
 
     it('should have marquee content', () => {
       expect(translations.es.home).toHaveProperty('marquee')
-      expect(translations.es.home.marquee).toHaveProperty('modbus')
+      expect(translations.es.home.marquee).toHaveProperty('architecture')
       expect(translations.es.home.marquee).toHaveProperty('localFirst')
       expect(translations.es.home.marquee).toHaveProperty('topology')
       expect(translations.es.home.marquee).toHaveProperty('hmi')

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Factory, LockKeyhole, Unlink } from "lucide-react";
 import { buildWhatsAppLink, contactConfig } from "@/lib/contact";
 import { translations, type Language } from "@/lib/translations";
 
@@ -13,7 +14,7 @@ export default function HomeView({ onOpenCotizador, language }: HomeViewProps) {
   const t = translations[language].home;
 
   const marqueeItems = [
-    { icon: "fa-bolt", label: t.marquee.modbus },
+    { icon: "fa-bolt", label: t.marquee.architecture },
     { icon: "fa-shield-cat", label: t.marquee.localFirst },
     { icon: "fa-network-wired", label: t.marquee.topology },
     { icon: "fa-display", label: t.marquee.hmi },
@@ -145,24 +146,24 @@ export default function HomeView({ onOpenCotizador, language }: HomeViewProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="glass-panel p-8 rounded-2xl glass-card-hover space-y-4 hover-target">
-            <div className="w-12 h-12 rounded-xl bg-zwol-cyan/10 border border-zwol-cyan/30 flex items-center justify-center text-zwol-cyan text-xl">
-              <i className="fa-solid fa-cubes" />
+            <div className="w-12 h-12 mx-auto rounded-xl bg-zwol-cyan/10 border border-zwol-cyan/30 flex items-center justify-center text-zwol-cyan text-xl">
+              <Unlink className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
             </div>
             <h3 className="font-display font-bold text-white title-card">{t.sections.card1Title}</h3>
             <p className="text-gray-400 text-sm leading-relaxed">{t.sections.card1Text}</p>
           </div>
 
           <div className="glass-panel p-8 rounded-2xl glass-card-hover space-y-4 hover-target">
-            <div className="w-12 h-12 rounded-xl bg-zwol-cyan/10 border border-zwol-cyan/30 flex items-center justify-center text-zwol-cyan text-xl">
-              <i className="fa-solid fa-industry" />
+            <div className="w-12 h-12 mx-auto rounded-xl bg-zwol-cyan/10 border border-zwol-cyan/30 flex items-center justify-center text-zwol-cyan text-xl">
+              <Factory className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
             </div>
             <h3 className="font-display font-bold text-white title-card">{t.sections.card2Title}</h3>
             <p className="text-gray-400 text-sm leading-relaxed">{t.sections.card2Text}</p>
           </div>
 
           <div className="glass-panel p-8 rounded-2xl glass-card-hover space-y-4 hover-target">
-            <div className="w-12 h-12 rounded-xl bg-zwol-cyan/10 border border-zwol-cyan/30 flex items-center justify-center text-zwol-cyan text-xl">
-              <i className="fa-solid fa-user-lock" />
+            <div className="w-12 h-12 mx-auto rounded-xl bg-zwol-cyan/10 border border-zwol-cyan/30 flex items-center justify-center text-zwol-cyan text-xl">
+              <LockKeyhole className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
             </div>
             <h3 className="font-display font-bold text-white title-card">{t.sections.card3Title}</h3>
             <p className="text-gray-400 text-sm leading-relaxed">{t.sections.card3Text}</p>
@@ -226,37 +227,9 @@ export default function HomeView({ onOpenCotizador, language }: HomeViewProps) {
       </section>
 
       <section id="ingenieria" className="py-20 px-6 md:px-12 lg:px-16 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-6 space-y-6">
-            <span className="text-zwol-cyan font-mono text-xs uppercase tracking-widest">{t.sections.engineeringLabel}</span>
-            <h2 className="font-display font-bold text-white uppercase title-section">
-              {t.sections.engineeringTitle} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-zwol-cyan to-blue-600">{t.sections.engineeringTitleAccent}</span>
-            </h2>
-            <p className="text-gray-300 font-light text-base leading-relaxed">{t.sections.engineeringText}</p>
-
-            <div className="grid grid-cols-2 gap-4 font-mono pt-4">
-              <div className="glass-panel p-4 rounded-xl space-y-1">
-                <span className="text-zwol-cyan font-bold text-3xl">160</span>
-                <p className="text-gray-400 text-xs">{t.sections.stat160}</p>
-              </div>
-              <div className="glass-panel p-4 rounded-xl space-y-1">
-                <span className="text-zwol-cyan font-bold text-3xl">0.2ms</span>
-                <p className="text-gray-400 text-xs">{t.sections.statLatencyLabel}</p>
-              </div>
-            </div>
-
-            <ul className="space-y-3 font-mono text-xs text-gray-300 pt-2">
-              <li className="flex items-center gap-3"><i className="fa-solid fa-check text-zwol-cyan" />{t.sections.engineeringList1}</li>
-              <li className="flex items-center gap-3"><i className="fa-solid fa-check text-zwol-cyan" />{t.sections.engineeringList2}</li>
-              <li className="flex items-center gap-3"><i className="fa-solid fa-check text-zwol-cyan" />{t.sections.engineeringList3}</li>
-            </ul>
-          </div>
-
-          <div className="lg:col-span-6">
-            <div className="img-container aspect-square glass-panel p-2 hover-target">
-              <img src="https://oa7wcdk05oqhgv2n.public.blob.vercel-storage.com/WhatsApp%20Image%202026-07-28%20at%208.32.27%20AM%20%281%29.jpeg" alt={language === "en" ? "Servers and infrastructure" : language === "pt" ? "Servidores e infraestrutura" : "Servidores e Infraestructura"} />
-            </div>
+        <div className="mx-auto max-w-5xl">
+          <div className="img-container aspect-[16/9] glass-panel p-2 hover-target">
+            <img className="!w-full !object-cover" src="https://oa7wcdk05oqhgv2n.public.blob.vercel-storage.com/zwol2.png" alt={language === "en" ? "Servers and infrastructure" : language === "pt" ? "Servidores e infraestrutura" : "Servidores e Infraestructura"} />
           </div>
         </div>
       </section>

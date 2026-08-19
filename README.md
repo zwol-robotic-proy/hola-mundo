@@ -1,11 +1,11 @@
 # 🏠 Zwol-Home - Plataforma de Domótica Industrial
 
-Infraestructura avanzada de hogar inteligente que unifica robustez industrial con comodidad residencial. Sistema basado en ModBus TCP-IP con procesamiento local-first y cero latencia.
+Infraestructura avanzada de hogar inteligente que unifica robustez industrial con comodidad residencial. Sistema con procesamiento local-first y cero latencia.
 
 ## 🎯 Características Principales
 
 - **🔒 Local First**: Toda la lógica y datos se procesan en tu propiedad
-- **⚡ Cero Latencia**: Protocolo ModBus TCP-IP con latencia de 0.2ms
+- **⚡ Cero Latencia**: Arquitectura industrial con latencia de 0.2ms
 - **🛡️ Confiabilidad Industrial**: Diseñado para operar 24/7 sin interrupciones
 - **🌐 Totalmente Abierto**: Sin lock-in propietario, compatible con Home Assistant
 - **📱 Multi-interfaz**: Panel táctil HMI + control smartphone + teclas físicas

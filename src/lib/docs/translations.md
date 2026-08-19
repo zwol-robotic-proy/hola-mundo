@@ -116,7 +116,7 @@ Contiene todas las etiquetas de navegación y menú.
 translations.es.nav = {
   concept: string          // "01. Concepto"
   challenge: string        // "02. El Desafío"
-  engineering: string      // "03. ModBus TCP-IP"
+  engineering: string      // "03. Arquitectura Robusta"
   control: string          // "04. Interfaces"
   ecosystem: string        // "05. Ecosistema"
   startProject: string     // "Iniciar Proyecto"
@@ -165,7 +165,7 @@ translations.es.home = {
   heroSubtitle: string       // Subtítulo completo
   quote: string              // Cita destacada
   ctaExplore: string         // "Explorar Ecosistema"
-  ctaSpecs: string           // "Especificaciones ModBus"
+  ctaSpecs: string           // "Especificaciones de Integración"
   // ...
 }
 ```
@@ -186,7 +186,7 @@ translations.es.home = {
 ```typescript
 {
   marquee: {
-    modbus: string           // "Protocolo ModBus TCP-IP"
+    architecture: string     // "Arquitectura Industrial"
     localFirst: string       // "Procesamiento Local First"
     topology: string         // "Topología Descentralizada"
     hmi: string              // "Pantalla Táctil HMI 10\""
@@ -535,7 +535,7 @@ translations[Language]
     ├── statLatencyValue
     ├── statNodesValue
     ├── marquee (objeto)
-    │   ├── modbus
+    │   ├── architecture
     │   ├── localFirst
     │   ├── topology
     │   ├── hmi
