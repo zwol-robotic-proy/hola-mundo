@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { languageOptions, translations, type Language } from "@/lib/translations";
 
 interface NavbarProps {
@@ -14,8 +15,30 @@ export default function Navbar({ currentView, setCurrentView, language, setLangu
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[language].nav;
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const closeWithEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileMenuOpen(false);
+    };
+
+    const closeOnDesktop = () => {
+      if (window.innerWidth >= 1280) setMobileMenuOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeWithEscape);
+    window.addEventListener("resize", closeOnDesktop);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", closeWithEscape);
+      window.removeEventListener("resize", closeOnDesktop);
+    };
+  }, [mobileMenuOpen]);
+
   return (
-    <nav className="fixed top-0 w-full z-50 py-4 px-6 md:px-12 transition-all duration-300 bg-zwol-black/90 dark:bg-zwol-black/90 light:bg-white/90 backdrop-blur-md border-b border-white/5 dark:border-white/5 light:border-gray-200/20">
+    <nav className="fixed top-0 z-50 w-full border-b border-white/5 bg-zwol-black/90 px-4 py-3 backdrop-blur-md transition-all duration-300 dark:border-white/5 dark:bg-zwol-black/90 sm:px-6 sm:py-4 md:px-12 light:border-gray-200/20 light:bg-white/90">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <button onClick={() => setCurrentView("home")} className="flex items-center gap-3 group text-left">
           <div className="w-10 h-10 flex items-center justify-center">
@@ -27,7 +50,7 @@ export default function Navbar({ currentView, setCurrentView, language, setLangu
         </button>
 
         {currentView === "home" && (
-          <div className="hidden lg:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-gray-400 dark:text-gray-400 light:text-gray-600">
+          <div className="hidden items-center gap-8 font-mono text-xs uppercase tracking-widest text-gray-400 dark:text-gray-400 xl:flex light:text-gray-600">
             <a href="#concepto" className="hover:text-zwol-cyan transition-colors">{t.concept}</a>
             <a href="#desafio" className="hover:text-zwol-cyan transition-colors">{t.challenge}</a>
             <a href="#ingenieria" className="hover:text-zwol-cyan transition-colors">{t.engineering}</a>
@@ -53,28 +76,31 @@ export default function Navbar({ currentView, setCurrentView, language, setLangu
                 ))}
               </select>
               <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zwol-cyan">
-                <i className="fa-solid fa-chevron-down text-[10px]" />
+                <ChevronDown aria-hidden="true" className="h-3 w-3" />
               </span>
             </div>
           </label>
 
           <button
             onClick={() => setCurrentView("cotizador")}
-            className="hidden sm:inline-flex px-6 py-2.5 rounded-full bg-gradient-to-r from-zwol-cyan to-blue-600 text-zwol-black font-bold text-xs uppercase tracking-wider hover:shadow-[0_0_20px_rgba(0,210,255,0.5)] transition-all"
+            className="hidden rounded-full bg-gradient-to-r from-zwol-cyan to-blue-600 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-zwol-black transition-all hover:shadow-[0_0_20px_rgba(0,210,255,0.5)] sm:inline-flex"
           >
             {t.startProject}
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden text-white dark:text-white light:text-zwol-black text-2xl p-2 focus:outline-none"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={mobileMenuOpen ? "Cerrar menú" : t.menuToggle}
+            className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-colors hover:border-zwol-cyan/50 hover:text-zwol-cyan focus:outline-none focus:ring-2 focus:ring-zwol-cyan/60 xl:hidden dark:text-white light:text-zwol-black"
           >
-            <i className="fa-solid fa-bars" />
+            {mobileMenuOpen ? <X aria-hidden="true" className="h-5 w-5" /> : <Menu aria-hidden="true" className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-zwol-dark/95 dark:bg-zwol-dark/95 light:bg-white/95 backdrop-blur-xl border-b border-white/10 dark:border-white/10 light:border-gray-200/20 px-6 py-6 space-y-4 font-mono text-xs uppercase tracking-widest text-gray-300 dark:text-gray-300 light:text-gray-700">
+        <div id="mobile-navigation" className="absolute left-0 top-full max-h-[calc(100dvh-5rem)] w-full overflow-y-auto border-b border-white/10 bg-zwol-dark/95 px-4 py-5 font-mono text-xs uppercase tracking-widest text-gray-300 shadow-2xl backdrop-blur-xl sm:px-6 sm:py-6 dark:border-white/10 dark:bg-zwol-dark/95 dark:text-gray-300 light:border-gray-200/20 light:bg-white/95 light:text-gray-700">
           <label className="relative block">
             <span className="sr-only">{t.menuToggle}</span>
             <div className="group relative overflow-hidden rounded-full border border-zwol-cyan/30 bg-gradient-to-r from-white/5 via-slate-900/70 to-white/5 shadow-[0_0_18px_rgba(0,210,255,0.14)] backdrop-blur-sm transition-all duration-300 hover:border-zwol-cyan/70 hover:shadow-[0_0_24px_rgba(0,210,255,0.22)]">
@@ -91,15 +117,15 @@ export default function Navbar({ currentView, setCurrentView, language, setLangu
                 ))}
               </select>
               <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zwol-cyan">
-                <i className="fa-solid fa-chevron-down text-[10px]" />
+                <ChevronDown aria-hidden="true" className="h-3 w-3" />
               </span>
             </div>
           </label>
-          <a href="#concepto" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block hover:text-zwol-cyan">{t.concept}</a>
-          <a href="#desafio" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block hover:text-zwol-cyan">{t.challenge}</a>
-          <a href="#ingenieria" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block hover:text-zwol-cyan">{t.engineering}</a>
-          <a href="#control" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block hover:text-zwol-cyan">{t.control}</a>
-          <a href="#ecosistema" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block hover:text-zwol-cyan">{t.ecosystem}</a>
+          <a href="#concepto" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/5 hover:text-zwol-cyan">{t.concept}</a>
+          <a href="#desafio" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/5 hover:text-zwol-cyan">{t.challenge}</a>
+          <a href="#ingenieria" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/5 hover:text-zwol-cyan">{t.engineering}</a>
+          <a href="#control" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/5 hover:text-zwol-cyan">{t.control}</a>
+          <a href="#ecosistema" onClick={() => { setCurrentView("home"); setMobileMenuOpen(false); }} className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/5 hover:text-zwol-cyan">{t.ecosystem}</a>
           <button
             onClick={() => { setCurrentView("cotizador"); setMobileMenuOpen(false); }}
             className="w-full text-center py-3 rounded-xl bg-zwol-cyan text-zwol-black font-bold uppercase"
